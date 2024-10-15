@@ -1,0 +1,1456 @@
+
+R version 4.4.1 (2024-06-14 ucrt) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R è un software libero ed è rilasciato SENZA ALCUNA GARANZIA.
+Siamo ben lieti se potrai redistribuirlo, ma sotto certe condizioni.
+Scrivi 'license()' o 'licence()' per maggiori dettagli.
+
+R è un progetto collaborativo con molti contributi esterni.
+Scrivi 'contributors()' per maggiori informazioni e 'citation()'
+per sapere come citare R o i pacchetti nelle pubblicazioni.
+
+Scrivi 'demo()' per una dimostrazione, 'help()' per la guida
+oppure 'help.start()' per la guida nel browser HTML.
+Scrivi 'q()' per uscire da R.
+
+> ##############################################################
+> # LUCAS - Calibration and estimation by country 2018
+> ##############################################################
+> options(stringsAsFactors = TRUE)
+Messaggio di avvertimento:
+In options(stringsAsFactors = TRUE) :
+  'options(stringsAsFactors = TRUE)' è deprecato e sarà disabilitato
+> library(data.table)
+> setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+> 
+> path_data <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/DATA/"
+> 
+> library(ReGenesees)
+
+
+--------------------------------------------------------
+> The ReGenesees package has been successfully loaded. <
+--------------------------------------------------------
+
+
+Package: ReGenesees
+Type: Package
+Title: R Evolved Generalized Software for Sampling Estimates and Errors
+        in Surveys
+Description: Design-Based and Model-Assisted analysis of complex sample
+        surveys. Multistage, stratified, clustered, unequally weighted
+        survey designs. Calibration of survey weights. Horvitz-Thompson
+        and Calibration Estimators. Variance Estimation for nonlinear
+        smooth estimators by Taylor-series linearization. Estimates,
+        standard errors, confidence intervals and design effects for:
+        Totals, Means, absolute and relative Frequency Distributions
+        (marginal, conditional, and joint), Ratios, Shares and Ratios
+        of Shares, Multiple Regression Coefficients, and Quantiles.
+        Automated Linearization of user-defined Complex Estimators.
+        Design Covariance and Correlation. Estimates and sampling
+        errors of user-defined complex Measures of Change derived from
+        two not necessarily independent samples. Estimates and sampling
+        errors for subpopulations. Consistent trimming of calibration
+        weights. Calibration on complex population parameters, e.g.
+        multiple regression coefficients. Generalized Variance
+        Functions (GVF) method for predicting variance estimates.
+        Sample size requirements and power calculations.
+Version: 2.4
+Author: Diego Zardetto [aut, cre]
+Maintainer: Diego Zardetto <zardetto@istat.it>
+Authors@R: person("Diego", "Zardetto", role = c("aut", "cre"), email =
+        "zardetto@istat.it")
+URL: https://diegozardetto.github.io/ReGenesees/,
+        https://github.com/DiegoZardetto/ReGenesees/
+BugReports: https://github.com/DiegoZardetto/ReGenesees/issues/
+Copyright: Diego Zardetto and Thomas Lumley (for incorporating modified
+        code derived from early versions of the survey package).
+License: EUPL
+Imports: stats, MASS
+Depends: R (>= 3.5.0)
+ByteCompile: TRUE
+NeedsCompilation: no
+Packaged: 2024-06-07 13:49:17 UTC; Giulio
+Built: R 4.4.0; ; 2024-06-07 13:49:22 UTC; windows
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: ReGenesees
+RemoteUsername: DiegoZardetto
+RemotePkgRef: DiegoZardetto/ReGenesees
+RemoteRef: HEAD
+RemoteSha: b1483af97a5aac09134c22d4238d12bd351f3a95
+GithubRepo: ReGenesees
+GithubUsername: DiegoZardetto
+GithubRef: HEAD
+GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
+
+> 
+> # Prepare the path for the output
+> dire <- getwd()
+> direnew1 <- paste(dire, "/estimates2022", sep = "")
+> # if (dir.exists(direnew1))
+> #   unlink(direnew1,recursive=TRUE)
+> if (!dir.exists(direnew1)) 
++   dir.create(direnew1)
+> 
+> direnew2 <- paste(dire, "/weights2022", sep = "")
+> # if (dir.exists(direnew2))
+> #   unlink(direnew2,recursive=TRUE)
+> if (!dir.exists(direnew2)) 
++   dir.create(direnew2)
+> # Read areas
+> 
+> areas <- read.csv2(paste0(path_data,"NUTS2_16_areas.csv"))
+> 
+> # Read population
+> pop <- read.csv2(paste0(path_data,"Pop_nuts.csv"))
+> colnames(pop) <- c("NUTS","Pop2009","Pop2012","Pop2015","Pop2018")
+> 
+> 
+> # Read survey 2022
+> s2022 <- fread(paste0(path_data,"survey_2022.txt"))
+> # dati <- fread(paste0(path_data,"EU_LUCAS_2022.csv"))
+> # s <- fread(paste0(path_data,"sample_LUCAS_2022.csv"))
+> # s$V1 <- s$SURVEY_LC1 <- s$SURVEY_LU1 <- NULL
+> # s2022 <- merge(s,dati[,c("POINT_ID","SURVEY_LC1","SURVEY_LU1")],by="POINT_ID")
+> # s2022 <- s2022[!is.na(s2022$SURVEY_LC1) & s2022$SURVEY_LC1 != 8 & s2022$SURVEY_LU1 != 8,]
+> #------------------------------------------
+> 
+> s2022$SURVEY_LC1 <- factor(s2022$SURVEY_LC1)
+> s2022$SURVEY_LU1 <- factor(s2022$SURVEY_LU1)
+> 
+> s2022$SURVEY_LC1_1 <- as.factor(substr(as.character(s2022$SURVEY_LC1),1,1))
+> table(s2022$SURVEY_LC1_1, useNA="ifany")
+
+     A      B      C      D      E      F      G      H 
+ 19457  98078 110477  30159 100375  16133  16905   7946 
+> s2022$SURVEY_LC1_2 <- as.factor(substr(as.character(s2022$SURVEY_LC1),1,2))
+> table(s2022$SURVEY_LC1_2, useNA="ifany")
+
+    A    A1    A2    A3     B    B1    B2    B3    B4    B5    B7    B8    Bx 
+   10  4556 13416  1475   168 36654  2838  8728  1869  8384  4266  4917 30254 
+    C    C1    C2    C3     D    D1    D2     E    E1    E2    E3     F    F1 
+  400 62435 28520 19122    25 10792 19342    73 12084 77533 10685    11  3149 
+   F2    F3    F4     G    G1    G2    G3    G5     H    H1    H2 
+  583  1201 11189     6 12914  3767    48   170     8  7396   542 
+> s2022$SURVEY_LC1_3 <- as.factor(substr(as.character(s2022$SURVEY_LC1),1,3))
+> table(s2022$SURVEY_LC1_3, useNA="ifany")
+
+    A    A1   A11   A12   A13    A2   A21   A22    A3   A30     B   B11   B12 
+   10    20  3966   262   308    31  4421  8964     4  1471   168 12813  1490 
+  B13   B14   B15   B16   B17   B18   B19   B21   B22   B23   B31   B32   B33 
+ 6171  1694  1890 10441   111  1675   369  1280  1161   397  2386  4513   669 
+  B34   B35   B36   B37   B41   B42   B43   B44   B45   B51   B52   B53   B54 
+  223   734    32   171   873   101   706   114    75   588  1720  1206   584 
+  B55   B71   B72   B73   B74   B75   B76   B77   B81   B82   B83   B84   Bx1 
+ 4286  1305   231   398  1120   965   162    85  2750  1836   160   171 28452 
+  Bx2     C    C1   C10    C2   C21   C22   C23    C3   C31   C32   C33     D 
+ 1802   400   180 62255  2471  9701 13216  3132  2549  6329  5257  4987    25 
+   D1   D10    D2   D20     E    E1   E10    E2   E20    E3   E30     F    F1 
+   49 10743    47 19295    73    59 12025   156 77377    17 10668    11     6 
+  F10    F2   F20    F3   F30    F4   F40     G    G1   G11   G12    G2   G21 
+ 3143     2   581     1  1200    20 11169     6    13 12787   114     9  3732 
+  G22   G30   G50     H   H11   H12   H21   H22   H23 
+   26    48   170     8  3524  3872   375    91    76 
+> s2022$SURVEY_LU1_1 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,2))
+> table(s2022$SURVEY_LU1_1, useNA="ifany")
+
+    U1     U2     U3     U4 
+274623   1740  45869  77298 
+> s2022$SURVEY_LU1_2 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,3))
+> table(s2022$SURVEY_LU1_2, useNA="ifany")
+
+   U11    U12    U13    U14    U15    U21    U22    U31    U32    U33    U34 
+186678  84569   1500   1783     93    898    842  15961    758    584   1229 
+   U35    U36    U37    U41    U42 
+  2953  10111  14273   3757  73541 
+> s2022$SURVEY_LU1_3 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,4))
+> table(s2022$SURVEY_LU1_3, useNA="ifany")
+
+  U111   U112   U113   U120   U130   U140   U150   U210   U221   U222   U223 
+179341   5209   2128  84569   1500   1783     93    898    113     23    139 
+  U224   U225   U226   U227   U228   U311   U312   U313   U314   U315   U316 
+   108    116    199    135      9    669  10563   2204    360     12     24 
+  U317   U318   U319   U321   U322   U330   U341   U342   U350   U361   U362 
+   750    301   1078    498    260    584   1150     79   2953   8779   1332 
+  U370   U411   U412   U413   U414   U415   U420 
+ 14273    251     44     71    368   3023  73541 
+> 
+> # write.table(s2022,file=(paste0(path_data,"survey_2022.txt")),sep="\t",quote=F,row.names=F)
+> 
+> # Read master 
+> # giulio
+> load(paste0(path_data,"master.RData"))
+> 
+> # sum(master$point_area)
+> master$ELEV2 <- ifelse(master$ELEV < 100, 1, 
++                     ifelse(master$ELEV < 200, 2,
++                       ifelse(master$ELEV < 500, 3,
++                              ifelse(master$ELEV < 1000, 4,
++                                     ifelse(master$ELEV < 1500, 5, 6)))))
+> table(master$ELEV2)
+
+     1      2      3      4      5      6 
+293765 244917 300772 181776  51219  22597 
+> master$ELEV2 <- as.factor(master$ELEV2)
+> # master <- merge(master,master2)
+> # master <- merge(master,master3)
+> 
+> m4 <- fread(paste0(path_data,"master2019_with_point_area.csv"))
+> master <- merge(master,m4[,c("POINT_ID","point_area")],by="POINT_ID")
+> 
+> 
+> # exclusion of NUTS2  --> CHIEDERE CONFERMA!
+> master <- master[master$NUTS0_16 != "UK",]
+> master$NUTS0_16 <- factor(master$NUTS0_16)
+> master$NUTS1_16 <- factor(master$NUTS1_16)
+> master$NUTS2_16 <- factor(master$NUTS2_16)
+> 
+> 
+> excl_nuts2 <- c("ES63","ES64","ES70","FR9","PT20","PT30") 
+> master <- master[!(master$NUTS2_16 %in% excl_nuts2),]
+> 
+> 
+> # LOOP
+> 
+> # i <- which(levels(master$NUTS0_16) == "CY")
+> 
+> i <- which(levels(as.factor(master$NUTS0_16))=="IT")
+> for (i in c(1:27)) {
++   country <- levels(as.factor(master$NUTS0_16))[i]
++     cat("\n Country: ",country,"\n")
++     m <- master[master$NUTS0_16 == country,]
++     m$NUTS0_16 <- factor(m$NUTS0_16)
++     m$NUTS1_16 <- factor(m$NUTS1_16)
++     m$NUTS2_16 <- factor(m$NUTS2_16)
++     m$ELEV2 <- factor(m$ELEV2)
++     # m$imperviousness <- ifelse(is.na(m$imperviousness),0,m$imperviousness)
++ 
++     s <- merge(s2022,m[,c("POINT_ID","point_area","ELEV2")],
++                by=c("POINT_ID"))  
++     s <- s[!is.na(s$WEIGHTS),]
++     #--------------------------------------------------------------
++ 
++     
++     if (nrow(s) > 0 ) {
++       # s <- merge(s,pop[,c("NUTS","Pop2018")],by.x=c("NUTS0_16"),by.y=c("NUTS"),all.x=T)
++       # s$settl_pc <- (as.numeric(s$settlement)-1) * 1000 / s$Pop2018
++       # sum(s$settl_pc*s$initial_weight_area)*pop[pop$NUTS == "AT","Pop2018"] / (sum(area_country$Area)*1000)
++       # mean(as.numeric(s$settlement)-1)
++       # sum(s$settl_pc*s$initial_weight_area)*pop[pop$NUTS == "AT","Pop2018"] / 1000
++       # sum(area_country$Area)
++       s$NUTS0_16 <- factor(s$NUTS0_16)
++       s$NUTS1_16 <- factor(s$NUTS1_16)
++       s$NUTS2_16 <- factor(s$NUTS2_16)
++       s$ELEV2 <- factor(s$ELEV2)
++       s$STRATO <- as.factor(paste0(s$NUTS0_16,s$STRATUM))
++       # s$STRATO <- as.factor(paste0(s$NUTS0_16,s$STR05))
++       #s$initial_weight_area <- s$WEIGHTS
++       s$ones <- 1
++       m$ones <- 1
++ 
++       ###############################################################################
++       sum(s$point_area*s$WEIGHTS)
++       areatot <- sum(m$point_area)
++       master_areas <- tapply(m$point_area,m$NUTS2_16,FUN=sum)
++       cbind(areas[areas$NUTS2_16 %in% names(master_areas),],master_areas)
++       
++       areatots <- sum(s$point_area*s$WEIGHTS)
++       
++       # area_country <- areas[substr(as.character(areas$NUTS2_16),1,2) == country,]
++       # sum(area_country$Area)
++       # sum(s$WEIGHTS)
++       # sum(s$WEIGHTS*s$point_area)
++       # CALIBRATION
++       # design
++       des <- e.svydesign(data=s, ids= ~ POINT_ID, strata= ~ STRATO, weights= ~ WEIGHTS, self.rep.str= NULL, check.data= TRUE)
++       ls <- find.lon.strata(des)
++       if (!is.null(ls)) des <- collapse.strata(des)
++       
++       # known totals
++       s$NUTS2_16 <- factor(s$NUTS2_16)
++       # table(s$NUTS2_16)
++       # table(s$ELEV2)
++     
++       if (length(levels(s$NUTS2_16)) > 1) {
++         levels(des$variables$ELEV2) <- levels(m$ELEV2)
++         levels(des$variables$NUTS2_16) <- levels(m$NUTS2_16)
++         poptemp <- pop.template(data=des,
++                                 calmodel=   ~ 
++                                   point_area:ELEV2  - 1,
++                                  partition= FALSE)
++         popfill <- fill.template(universe=m, template= poptemp)
++         ht <- aux.estimates(design=des, calmodel = ~ point_area:ELEV2 - 1)
++         ht[, names(ht) %in% names(des)] <- popfill[, names(popfill) %in% names(ht)]
++         bb <- bounds.hint(des,ht)
++       
++       # calibration
++         cal <- e.calibrate(design=des, 
++                          df.population= popfill, 
++                          calmodel=   ~ point_area:ELEV2 - 1,
++                          calfun= "linear",
++                          bounds = bb
++                          ) 
++       }
++       if (length(levels(s$NUTS2_16)) == 1) {
++         poptemp <- pop.template(data=des,
++                                 calmodel= ~ point_area:ELEV2 - 1, 
++                                 partition= FALSE)
++         popfill <- fill.template(universe=m, template= poptemp)
++         ht <- aux.estimates(design=des, calmodel = ~ ones:ELEV2 - 1)
++         ht[, names(ht) %in% names(des)] <- popfill[, names(popfill) %in% names(ht)]
++         bb <- bounds.hint(des,ht)
++         
++         # calibration
++         cal <- e.calibrate(design=des, 
++                            df.population= popfill, 
++                            calmodel= ~ point_area:ELEV2 - 1, 
++                            calfun= "linear", 
++                            bounds =   c(0.1,3)) 
++       }
++       check.cal(cal)
++ 
++       summary(s$WEIGHTS)
++       sum(s$WEIGHTS)
++       sum(m$ones)
++       sum(m$point_area)
++       cal$prob <- cal$prob/cal$variables$point_area
++       sum(weights(cal))
++       summary(weights(cal))
++       # cal$prob <- cal$prob/cal$variables$point_area
++       sum(weights(cal))
++       df <- NULL
++       df$POINT_ID <- cal$variables$POINT_ID
++       df$cal_wgt <- weights(cal)
++       df <- as.data.frame(df)
++       filename <- paste(country,"_calibrated_wgts_2022.txt",sep="")
++       write.table(df,file = file.path(direnew2, filename),sep="\t",quote=FALSE,row.names=FALSE,dec=".")
++       
++       sum(weights(cal))
++ 
++       est_LC1_LU1 <- svystatTM(cal, ~ 
++                                  SURVEY_LC1_1+
++                                  SURVEY_LU1_1+
++                                  SURVEY_LC1_2+
++                                  SURVEY_LU1_2+
++                                  SURVEY_LC1_3+
++                                  SURVEY_LU1_3,
++                                  # art_imp+
++                                  # art_clc+
++                                  # settlement+
++                                  # settl_pc+
++                                  # fao_class_name+
++                                  # lue+
++                                  # lud,
++                                estimator="Total",
++                                vartype=c("se","cv"),
++                                conf.int= TRUE, 
++                                conf.lev= 0.95)
++       sum(est_LC1_LU1$Total[1:8])
++ 
++       est_LC1_LU1_NUTS1_16 <- svystatTM(cal, ~ 
++                                           SURVEY_LC1_1+
++                                           SURVEY_LU1_1+
++                                           SURVEY_LC1_2+
++                                           SURVEY_LU1_2+
++                                           SURVEY_LC1_3+
++                                           SURVEY_LU1_3,
++                                           # art_imp+
++                                           # art_clc+
++                                           # settlement+
++                                           # fao_class_name+
++                                           # lue+
++                                           # lud,
++                                         by = ~ NUTS1_16,
++                                         estimator="Total",
++                                         vartype=c("se","cv"),
++                                         conf.int= TRUE, 
++                                         conf.lev= 0.95)      
++     
++       est_LC1_LU1_NUTS2_16 <- svystatTM(cal, ~ 
++                                           SURVEY_LC1_1+
++                                           SURVEY_LU1_1+
++                                           SURVEY_LC1_2+
++                                           SURVEY_LU1_2+
++                                           SURVEY_LC1_3+
++                                           SURVEY_LU1_3,
++                                           # art_imp+
++                                           # art_clc+
++                                           # settlement+
++                                           # fao_class_name+
++                                           # lue+
++                                           # lud,
++                                         by = ~ NUTS2_16,
++                                         estimator="Total",
++                                         vartype=c("se","cv"),
++                                         conf.int= TRUE, 
++                                         conf.lev= 0.95)
++ 
++       filename <- paste(country,'_est_LC1_LU1_2022.csv',sep="")
++       write.svystat(est_LC1_LU1,file = file.path(direnew1, filename),sep=",",dec=".")
++       
++       # Transposed ----------------------------------------------
++       est_LC1_LU1_NUTS1_16_t <- as.data.frame(t(est_LC1_LU1_NUTS1_16))
++       filename <- paste(country,"_est_LC1_LU1_NUTS1_16_2022_t.csv",sep="")
++       est_LC1_LU1_NUTS1_16_t$variable <- row.names(est_LC1_LU1_NUTS1_16_t)
++       est_LC1_LU1_NUTS1_16_t$variable[1] <- "variable"
++       write.table(est_LC1_LU1_NUTS1_16_t,file = file.path(direnew1, filename),sep=",",dec=".",
++                   row.names=FALSE,col.names=FALSE,quote=FALSE)
++       #-----------------------------------------------------------
++       est_LC1_LU1_NUTS2_16_t <- as.data.frame(t(est_LC1_LU1_NUTS2_16))
++       filename <- paste(country,"_est_LC1_LU1_NUTS2_16_2022_t.csv",sep="")
++       est_LC1_LU1_NUTS2_16_t$variable <- row.names(est_LC1_LU1_NUTS2_16_t)
++       est_LC1_LU1_NUTS2_16_t$variable[1] <- "variable"
++       write.table(est_LC1_LU1_NUTS2_16_t,file = file.path(direnew1, filename),sep=",",dec=".",
++                   row.names=FALSE,col.names=FALSE,quote=FALSE)
++       
++     }
++ }
+
+ Country:  AT 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (204) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 5 out of 5
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+4 point_area:ELEV25        14812.058         15563.755  751.69693
+5 point_area:ELEV26        17347.862         16777.503 -570.35961
+1 point_area:ELEV22         4593.668          4684.593   90.92475
+3 point_area:ELEV24        25309.131         24867.602 -441.52919
+2 point_area:ELEV23        21815.280         21983.877  168.59612
+  Relative.Difference
+4         0.050745559
+5        -0.032875909
+1         0.019789189
+3        -0.017444761
+2         0.007727996
+
+
+
+
+ Country:  BE 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (256) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 4 out of 4
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+4 point_area:ELEV24         1227.287          1220.510  -6.776564
+2 point_area:ELEV22         4604.250          4611.491   7.240737
+3 point_area:ELEV23         8767.040          8757.926  -9.113343
+1 point_area:ELEV21        16067.424         16061.572  -5.851533
+  Relative.Difference
+4       -0.0055170862
+2        0.0015722788
+3       -0.0010393821
+1       -0.0003641635
+
+
+
+
+ Country:  BG 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (187) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+6 point_area:ELEV26         4100.866          3728.773 -372.09326
+2 point_area:ELEV22        25331.453         25648.748  317.29456
+4 point_area:ELEV24        22881.861         23153.994  272.13260
+3 point_area:ELEV23        39171.331         38756.507 -414.82387
+5 point_area:ELEV25         9801.443          9832.755   31.31250
+1 point_area:ELEV21         9709.046          9738.708   29.66197
+  Relative.Difference
+6        -0.090713170
+2         0.012525220
+4         0.011892420
+3        -0.010589716
+5         0.003194356
+1         0.003054771
+
+
+
+
+ Country:  CY 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (35) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 1 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+1 point_area:ELEV21         2823.423          2603.026  -220.3968
+  Relative.Difference
+1         -0.07803251
+
+
+
+
+ Country:  CZ 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (188) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 4 out of 5
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+4 point_area:ELEV25         879.9881          346.0147 -533.97337
+1 point_area:ELEV22        3619.9127         3210.0293 -409.88344
+2 point_area:ELEV23       47358.2334        48312.6006  954.36715
+3 point_area:ELEV24       27008.8782        26980.5130  -28.36525
+  Relative.Difference
+4        -0.606107347
+1        -0.113198929
+2         0.020151660
+3        -0.001050181
+
+
+
+
+ Country:  DE 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (900) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate   Difference
+2 point_area:ELEV22       41468.4260        40132.9429 -1335.483093
+4 point_area:ELEV24       53537.1078        52255.8680 -1281.239776
+6 point_area:ELEV26         579.5079          588.6947     9.186754
+5 point_area:ELEV25        2731.7168         2690.1432   -41.573630
+3 point_area:ELEV23      123000.6023       124141.9728  1141.370509
+1 point_area:ELEV21      136251.6392       137430.1302  1178.490977
+  Relative.Difference
+2        -0.032204041
+4        -0.023931361
+6         0.015825373
+5        -0.015213296
+3         0.009279314
+1         0.008649308
+
+
+
+
+ Country:  DK 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (144) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 2 out of 2
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+2 point_area:ELEV22         622.2799          723.6626   101.3827
+1 point_area:ELEV21       42302.7201        42114.3429  -188.3772
+  Relative.Difference
+2         0.162659964
+1        -0.004452969
+
+
+
+
+ Country:  EE 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (29) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+All Calibration Constraints (3) fulfilled (at tolerance level epsilon = 1e-07).
+
+
+ Country:  EL 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (421) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+2 point_area:ELEV22        17656.058         16961.292 -694.76546
+5 point_area:ELEV25        13570.609         14006.375  435.76667
+3 point_area:ELEV23        33886.694         33494.763 -391.93120
+1 point_area:ELEV21        27674.964         27769.253   94.28885
+4 point_area:ELEV24        35128.421         35234.107  105.68642
+6 point_area:ELEV26         3777.255          3766.611  -10.64322
+  Relative.Difference
+2        -0.039347748
+5         0.032108697
+3        -0.011565591
+1         0.003406886
+4         0.003008488
+6        -0.002816969
+
+
+
+
+ Country:  ES 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (471) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+1 point_area:ELEV21         29724.21          29088.72  -635.4907
+6 point_area:ELEV26         17552.81          17221.04  -331.7683
+3 point_area:ELEV23        116371.91         114856.46 -1515.4474
+5 point_area:ELEV25         77092.05          78030.57   938.5224
+2 point_area:ELEV22         25703.56          25433.14  -270.4246
+4 point_area:ELEV24        232057.46         233465.19  1407.7281
+  Relative.Difference
+1        -0.021378843
+6        -0.018900079
+3        -0.013022339
+5         0.012173890
+2        -0.010520490
+4         0.006066265
+
+
+
+
+ Country:  FI 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (113) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 5 out of 5
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate   Difference
+5 point_area:ELEV25         96.01522          106.0087     9.993528
+4 point_area:ELEV24       2820.44706         2730.1111   -90.335961
+1 point_area:ELEV21     104413.03536       102029.5553 -2383.480032
+2 point_area:ELEV22     145963.43370       149209.2904  3245.856698
+3 point_area:ELEV23      85118.06867        84248.6922  -869.376430
+  Relative.Difference
+5          0.10300990
+4         -0.03201760
+1         -0.02282720
+2          0.02223731
+3         -0.01021365
+
+
+
+
+ Country:  FR 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (587) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate  Difference
+6 point_area:ELEV26         16638.46          16490.19  -148.26779
+2 point_area:ELEV22        150811.77         149673.64 -1138.13552
+4 point_area:ELEV24         66641.02          66889.69   248.67317
+5 point_area:ELEV25         24493.11          24441.27   -51.84179
+1 point_area:ELEV21        128878.58         129040.74   162.15737
+3 point_area:ELEV23        161597.05         161426.21  -170.84781
+  Relative.Difference
+6        -0.008910613
+2        -0.007546679
+4         0.003731477
+5        -0.002116500
+1         0.001258208
+3        -0.001057239
+
+
+
+
+ Country:  HR 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (52) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 5 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+6 point_area:ELEV26          87.8471          110.1513   22.30422
+1 point_area:ELEV21       11759.0525        11376.7070 -382.34547
+5 point_area:ELEV25        2124.4034         2177.9348   53.53143
+4 point_area:ELEV24        9623.8321         9755.2843  131.45226
+2 point_area:ELEV22       18188.5553        18288.9742  100.41897
+  Relative.Difference
+6         0.251040542
+1        -0.032512225
+5         0.025186478
+4         0.013657616
+2         0.005520694
+
+
+
+
+ Country:  HU 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (181) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 4 out of 4
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+4 point_area:ELEV24          747.793          987.2719  239.47892
+3 point_area:ELEV23        15489.882        14978.6887 -511.19298
+2 point_area:ELEV22        46451.631        46779.2160  327.58541
+1 point_area:ELEV21        30322.695        30260.1957  -62.49896
+  Relative.Difference
+4         0.319819934
+3        -0.032999605
+2         0.007052031
+1        -0.002061060
+
+
+
+
+ Country:  IE 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (88) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 4 out of 4
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate   Difference
+2 point_area:ELEV22       18520.2459        17909.8779 -610.3680451
+3 point_area:ELEV23        8232.6572         8382.7080  150.0508021
+1 point_area:ELEV21       42605.5675        42935.4643  329.8967743
+4 point_area:ELEV24         588.5293          588.6997    0.1703874
+  Relative.Difference
+2       -0.0329550208
+3        0.0182240768
+1        0.0077428620
+4        0.0002890227
+
+
+
+
+ Country:  IT 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (596) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+2 point_area:ELEV22         37325.01          36402.96  -922.0478
+6 point_area:ELEV26         24811.13          24437.86  -373.2688
+3 point_area:ELEV23         83027.81          83967.57   939.7507
+4 point_area:ELEV24         62865.85          63492.34   626.4887
+1 point_area:ELEV21         69130.75          68551.47  -579.2823
+5 point_area:ELEV25         24912.44          24773.13  -139.3090
+  Relative.Difference
+2        -0.024702553
+6        -0.015043803
+3         0.011318369
+4         0.009965327
+1        -0.008379396
+5        -0.005591721
+
+
+
+
+ Country:  LT 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (58) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 3 out of 3
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+3 point_area:ELEV23         1162.542          731.8452  -430.6967
+1 point_area:ELEV21        32222.204        33027.7573   805.5534
+2 point_area:ELEV22        31899.254        31519.5308  -379.7234
+  Relative.Difference
+3         -0.37016005
+1          0.02499917
+2         -0.01190346
+
+
+
+
+ Country:  LU 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (14) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+All Calibration Constraints (3) fulfilled (at tolerance level epsilon = 1e-07).
+
+
+ Country:  LV 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (37) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+All Calibration Constraints (3) fulfilled (at tolerance level epsilon = 1e-07).
+
+
+ Country:  MT 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_1, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (10) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+All Calibration Constraints (3) fulfilled (at tolerance level epsilon = 1e-07).
+
+
+ Country:  NL 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (292) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 2 out of 3
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate  Difference
+1 point_area:ELEV21       37016.5272        35466.5441 -1549.98310
+2 point_area:ELEV22         345.4074          333.6915   -11.71584
+  Relative.Difference
+1          -0.0418716
+2          -0.0338210
+
+
+
+
+ Country:  PL 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (452) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate   Difference
+5 point_area:ELEV25        491.82032        1060.31041   568.490085
+6 point_area:ELEV26         63.89479          59.96127    -3.933523
+4 point_area:ELEV24       9503.98829        9655.75635   151.768061
+1 point_area:ELEV21      75642.10328       74435.86574 -1206.237532
+3 point_area:ELEV23      69547.50786       68695.86983  -851.638037
+2 point_area:ELEV22     156678.68546      157910.46905  1231.783595
+  Relative.Difference
+5         1.153544329
+6        -0.060613849
+4         0.015967201
+1        -0.015946431
+3        -0.012245238
+2         0.007861795
+
+
+
+
+ Country:  PT 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (141) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate   Difference
+6 point_area:ELEV26         76.08634          138.0648    61.978438
+1 point_area:ELEV21      18072.62005        16816.9960 -1255.624085
+3 point_area:ELEV23      31161.87352        32577.4515  1415.577954
+4 point_area:ELEV24      18407.79359        18070.2763  -337.517261
+5 point_area:ELEV25       1440.68459         1446.8688     6.184176
+2 point_area:ELEV22      19943.94192        19878.4124   -65.529470
+  Relative.Difference
+6         0.804013247
+1        -0.069472750
+3         0.045425142
+4        -0.018334567
+5         0.004289549
+2        -0.003285518
+
+
+
+
+ Country:  RO 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (262) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate  Difference
+5 point_area:ELEV25        19266.831         14703.540 -4563.29172
+3 point_area:ELEV23        69491.090         73343.734  3852.64340
+4 point_area:ELEV24        44898.321         46726.583  1828.26193
+2 point_area:ELEV22        44102.706         42343.416 -1759.28998
+6 point_area:ELEV26         3976.014          4045.727    69.71314
+1 point_area:ELEV21        56663.038         56982.551   319.51333
+  Relative.Difference
+5        -0.236834734
+3         0.055440028
+4         0.040719144
+2        -0.039889845
+6         0.017529014
+1         0.005638732
+
+
+
+
+ Country:  SE 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (204) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate    Difference
+6 point_area:ELEV26           488.80           528.854    40.0539954
+4 point_area:ELEV24         77912.01         78785.362   873.3568922
+1 point_area:ELEV21        102499.20        101473.456 -1025.7401310
+2 point_area:ELEV22         78160.91         77734.091  -426.8161855
+3 point_area:ELEV23        179706.34        179962.235   255.8930100
+5 point_area:ELEV25          8656.75          8656.643    -0.1065446
+  Relative.Difference
+6        8.177623e-02
+4        1.120939e-02
+1       -1.000720e-02
+2       -5.460667e-03
+3        1.423943e-03
+5       -1.230627e-05
+
+
+
+
+ Country:  SI 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_2, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (58) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate Difference
+1 point_area:ELEV21         227.5356          204.1886  -23.34709
+2 point_area:ELEV22        1442.8721         1498.0882   55.21616
+6 point_area:ELEV26         515.3106          533.0566   17.74593
+5 point_area:ELEV25        1788.2551         1802.9796   14.72449
+4 point_area:ELEV24        7297.8774         7261.1948  -36.68259
+3 point_area:ELEV23        9001.1491         8982.0935  -19.05567
+  Relative.Difference
+1        -0.102159511
+2         0.038241724
+6         0.034370641
+5         0.008229398
+4        -0.005025785
+3        -0.002116791
+
+
+
+
+ Country:  SK 
+
+# Empty levels found in factors: SURVEY_LC1, SURVEY_LU1, SURVEY_LC1_2, SURVEY_LC1_3, SURVEY_LU1_3
+# Empty levels have been dropped!
+
+
+# All lonely strata (95) successfully collapsed!
+
+
+# Coherence check between 'universe' and 'template': OK
+
+
+A starting suggestion: try to calibrate with bounds=c(0.999, 1.001)
+
+Remark: this is just a hint, not an exact result
+Feasible bounds for calibration problem must cover the interval [1, 1]
+
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 6 out of 6
+- Summary of mismatches: 
+
+$return.code
+     global
+code      1
+
+$fail.diagnostics
+$fail.diagnostics$global
+           Variable Population.Total Achieved.Estimate  Difference
+5 point_area:ELEV25        2391.1009         1665.8193 -725.281584
+6 point_area:ELEV26         395.8285          350.7430  -45.085564
+3 point_area:ELEV23       17723.9292        18939.9765 1216.047305
+4 point_area:ELEV24       15734.3257        15367.1091 -367.216661
+2 point_area:ELEV22       12322.0833        12247.2169  -74.866432
+1 point_area:ELEV21         467.7323          470.3511    2.618781
+  Relative.Difference
+5        -0.303198573
+6        -0.113614720
+3         0.068606610
+4        -0.023337087
+2        -0.006075300
+1         0.005586943
+
+
+
+Ci sono 50 o più avvertimenti (utilizza warnings() per visualizzare i primi 50)
+> 
+> 
+> 
+> 
+> proc.time()
+   utente   sistema trascorso 
+  3104.56    238.50   3383.81 

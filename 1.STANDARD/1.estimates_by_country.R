@@ -105,7 +105,7 @@ for (i in c(1:27)) {
 
     s <- merge(s2022,m[,c("POINT_ID","point_area","ELEV2")],
                by=c("POINT_ID"))  
-    s <- s[!is.na(s$WEIGHTS),]
+    s <- s[!is.na(s$WGT_LUCAS),]
     #--------------------------------------------------------------
 
     
@@ -122,25 +122,25 @@ for (i in c(1:27)) {
       s$ELEV2 <- factor(s$ELEV2)
       s$STRATO <- as.factor(paste0(s$NUTS0_16,s$STRATUM))
       # s$STRATO <- as.factor(paste0(s$NUTS0_16,s$STR05))
-      #s$initial_weight_area <- s$WEIGHTS
+      #s$initial_weight_area <- s$WGT_LUCAS
       s$ones <- 1
       m$ones <- 1
 
       ###############################################################################
-      sum(s$point_area*s$WEIGHTS)
+      sum(s$point_area*s$WGT_LUCAS)
       areatot <- sum(m$point_area)
       master_areas <- tapply(m$point_area,m$NUTS2_16,FUN=sum)
       cbind(areas[areas$NUTS2_16 %in% names(master_areas),],master_areas)
       
-      areatots <- sum(s$point_area*s$WEIGHTS)
+      areatots <- sum(s$point_area*s$WGT_LUCAS)
       
       # area_country <- areas[substr(as.character(areas$NUTS2_16),1,2) == country,]
       # sum(area_country$Area)
-      # sum(s$WEIGHTS)
-      # sum(s$WEIGHTS*s$point_area)
+      # sum(s$WGT_LUCAS)
+      # sum(s$WGT_LUCAS*s$point_area)
       # CALIBRATION
       # design
-      des <- e.svydesign(data=s, ids= ~ POINT_ID, strata= ~ STRATO, weights= ~ WEIGHTS, self.rep.str= NULL, check.data= TRUE)
+      des <- e.svydesign(data=s, ids= ~ POINT_ID, strata= ~ STRATO, weights= ~ WGT_LUCAS, self.rep.str= NULL, check.data= TRUE)
       ls <- find.lon.strata(des)
       if (!is.null(ls)) des <- collapse.strata(des)
       
@@ -187,8 +187,8 @@ for (i in c(1:27)) {
       }
       check.cal(cal)
 
-      summary(s$WEIGHTS)
-      sum(s$WEIGHTS)
+      summary(s$WGT_LUCAS)
+      sum(s$WGT_LUCAS)
       sum(m$ones)
       sum(m$point_area)
       cal$prob <- cal$prob/cal$variables$point_area

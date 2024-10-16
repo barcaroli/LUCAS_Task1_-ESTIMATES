@@ -49,13 +49,13 @@ head(master3)
 
 
 # Read survey 2022
-dati <- fread(paste0(path_data,"EU_LUCAS_2022.csv"))
-s <- fread(paste0(path_data,"sample_LUCAS_2022.csv"))
-s$V1 <- s$SURVEY_LC1 <- s$SURVEY_LU1 <- NULL
-s2022 <- merge(s,dati[,c("POINT_ID","SURVEY_LC1","SURVEY_LU1")],by="POINT_ID")
-s2022 <- s2022[!is.na(s2022$SURVEY_LC1) & s2022$SURVEY_LC1 != 8 & s2022$SURVEY_LU1 != 8,]
-#------------------------------------------
-
+# dati <- fread(paste0(path_data,"EU_LUCAS_2022.csv"))
+# s <- fread(paste0(path_data,"sample_LUCAS_2022.csv"))
+# s$V1 <- s$SURVEY_LC1 <- s$SURVEY_LU1 <- NULL
+# s2022 <- merge(s,dati[,c("POINT_ID","SURVEY_LC1","SURVEY_LU1")],by="POINT_ID")
+# s2022 <- s2022[!is.na(s2022$SURVEY_LC1) & s2022$SURVEY_LC1 != 8 & s2022$SURVEY_LU1 != 8,]
+# #------------------------------------------
+s2022 <- fread(paste0(path_data,"survey_2022.txt"))
 s2022$SURVEY_LC1 <- factor(s2022$SURVEY_LC1)
 s2022$SURVEY_LU1 <- factor(s2022$SURVEY_LU1)
 
@@ -71,6 +71,8 @@ s2022$SURVEY_LU1_2 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,3))
 table(s2022$SURVEY_LU1_2, useNA="ifany")
 s2022$SURVEY_LU1_3 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,4))
 table(s2022$SURVEY_LU1_3, useNA="ifany")
+
+
 
 # write.table(s2022,file=(paste0(path_data,"survey_2022.txt")),sep="\t",quote=F,row.names=F)
 
@@ -120,7 +122,7 @@ hrl <- hrl[!hrl$NUTS %in% excl_nuts2,]
 
 # i <- which(levels(master$NUTS0_16) == "CY")
 
-which(levels(as.factor(master$NUTS0_16))=="IT")
+i <- which(levels(as.factor(master$NUTS0_16))=="IT")
 for (i in c(1:27)) {
   country <- levels(as.factor(master$NUTS0_16))[i]
     cat("\n Country: ",country,"\n")
@@ -134,7 +136,7 @@ for (i in c(1:27)) {
     s <- merge(s2022,m[,c("POINT_ID","point_area","imperviousness","ELEV2",
                           "art_imp","art18","agr18","wod18","wet18","wat18")],
                by=c("POINT_ID"))  
-    s <- s[!is.na(s$WEIGHTS),]
+    s <- s[!is.na(s$WGT_LUCAS),]
     #--------------------------------------------------------------
     # s$art_imp <- s$imperviousness/100
     # sum(s$art_imp*s$peso_no_dim)
@@ -147,7 +149,7 @@ for (i in c(1:27)) {
     s$imperviousness <- ifelse(is.na(s$imperviousness),0,s$imperviousness)
     table(s$NUTS2_16)
     table(m$NUTS2_16)
-    tapply(s$imperviousness*s$WEIGHTS,s$NUTS2_16,sum)
+    tapply(s$imperviousness*s$WGT_LUCAS,s$NUTS2_16,sum)
     hrl$Imp2018[hrl$NUTS %in% unique(m$NUTS2_16)]
     summary(s$imperviousness)
     summary(m$imperviousness)
@@ -165,42 +167,42 @@ for (i in c(1:27)) {
       s$ELEV2 <- factor(s$ELEV2)
       s$STRATUM_LUCAS <- as.factor(s$STRATUM_LUCAS)
       # s$STRATO <- as.factor(paste0(s$NUTS0_16,s$STR05))
-      #s$initial_weight_area <- s$WEIGHTS
+      #s$initial_weight_area <- s$WGT_LUCAS
       s$ones <- 1
       m$ones <- 1
       # sum(s$initial_weight_area*s$agr18))
       # sum(m$agr18)
       areaimperv  <- tapply(m$art_imp,m$NUTS2_16,sum)
-      areaimperv2 <- tapply(s$art_imp*s$WEIGHTS,s$NUTS2_16,sum)
+      areaimperv2 <- tapply(s$art_imp*s$WGT_LUCAS,s$NUTS2_16,sum)
       hrl$Imp2018[substr(hrl$NUTS,1,2) == country]
       
       areaart  <- tapply(m$art18,m$NUTS2_16,sum)
-      areaart2 <- tapply(s$art18*s$WEIGHTS,s$NUTS2_16,sum)
-      sum(s$imperviousness*s$WEIGHTS)
+      areaart2 <- tapply(s$art18*s$WGT_LUCAS,s$NUTS2_16,sum)
+      sum(s$imperviousness*s$WGT_LUCAS)
       sum(m$imperviousness)
       sum(hrl$Imp2018[substr(hrl$NUTS,1,2) == country])
       
       # (sum(hrl$Imp2018[substr(hrl$NUTS,1,2) == country]))/sum(m$point_area)
-      # sum(s$WEIGHTS *s$imperviousness) / sum(s$point_area*s$WEIGHTS)
+      # sum(s$WGT_LUCAS *s$imperviousness) / sum(s$point_area*s$WGT_LUCAS)
       ###############################################################################
-      sum(s$WEIGHTS*s$art18)
+      sum(s$WGT_LUCAS*s$art18)
       sum(m$art18)
       
-      sum(s$WEIGHTS*s$imperviousness )
+      sum(s$WGT_LUCAS*s$imperviousness )
       sum(m$imperviousness )
        
       ###############################################################################
-      sum(s$point_area*s$WEIGHTS)
+      sum(s$point_area*s$WGT_LUCAS)
       # areatot <- sum(m$point_area)
-      # areatots <- sum(s$point_area*s$WEIGHTS)
+      # areatots <- sum(s$point_area*s$WGT_LUCAS)
       
       area_country <- areas[substr(as.character(areas$NUTS2_16),1,2) == country,]
       # sum(area_country$Area)
-      # sum(s$WEIGHTS)
-      # sum(s$WEIGHTS*s$point_area)
+      # sum(s$WGT_LUCAS)
+      # sum(s$WGT_LUCAS*s$point_area)
       # CALIBRATION
       # design
-      des <- e.svydesign(data=s, ids= ~ POINT_ID, strata= ~ STRATUM_LUCAS, weights= ~ WEIGHTS, self.rep.str= NULL, check.data= TRUE)
+      des <- e.svydesign(data=s, ids= ~ POINT_ID, strata= ~ STRATUM_LUCAS, weights = ~ WGT_LUCAS, self.rep.str= NULL, check.data= TRUE)
       ls <- find.lon.strata(des)
       if (!is.null(ls)) des <- collapse.strata(des)
       
@@ -286,8 +288,8 @@ for (i in c(1:27)) {
       }
       check.cal(cal)
 
-      summary(s$WEIGHTS)
-      sum(s$WEIGHTS)
+      summary(s$WGT_LUCAS)
+      sum(s$WGT_LUCAS)
       sum(m$ones)
       sum(m$point_area)
       cal$prob <- cal$prob/cal$variables$point_area

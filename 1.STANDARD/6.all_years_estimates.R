@@ -3,7 +3,7 @@
 ######################################################################
 setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
 path_previous_estimates <- "D:/Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
-path_data <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/DATA/"
+# path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 
 dire <- getwd()
 direnew1 <- paste(dire, "\\allyears_estimates\\", sep = "")
@@ -82,7 +82,7 @@ for (i in c(1:27)) {
                        "Area_2012","Std_error","CI_lower","CI_upper","CV",
                        "Area_2015","Std_error","CI_lower","CI_upper","CV",
                        "Area_2018","Std_error","CI_lower","CI_upper","CV",
-                       "Area_2018","Std_error","CI_lower","CI_upper","CV"
+                       "Area_2022","Std_error","CI_lower","CI_upper","CV"
     )
   }
   if (ind == 2) {

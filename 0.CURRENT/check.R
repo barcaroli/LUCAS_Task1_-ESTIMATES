@@ -1,8 +1,0 @@
-s2018$LC1 <- substr(s2018$land_cover,1,1)
-s2022$LC1 <- substr(s2022$land_cover,1,1)
-table(s2018$LC1)
-table(s2022$LC1)
-tapply(s2018$initial_weights,s2018$LC1,FUN=sum)/sum(s2018$initial_weights)
-tapply(s2022$initial_weights,s2022$LC1,FUN=sum)/sum(s2022$initial_weights)
-tapply(s2018$cal_wgt,s2018$LC1,FUN=sum)/sum(s2018$cal_wgt)
-tapply(s2022$cal_wgt,s2022$LC1,FUN=sum)/sum(s2022$cal_wgt)

@@ -8,8 +8,10 @@ library(sf)
 library(ReGenesees)
 library(openxlsx)
 
-setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
-path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
+# path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
 
 
 # Prepare the path for the output
@@ -150,7 +152,7 @@ table(c$NUTS0_16,useNA="ifany")
 
 ###########################################################################
 # Assign the new NUTS24 to the sample
-s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_21")],by="POINT_ID",all.x=TRUE)
+s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
 s2022$NUTS0_24 <- as.factor(s2022$NUTS0_24)
 s2022$NUTS1_24 <- as.factor(s2022$NUTS1_24)
 s2022$NUTS2_24 <- as.factor(s2022$NUTS2_24)
@@ -218,14 +220,14 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="EE")
+i = which(paesi=="BE")
 i
 
 for (i in c(1:length(paesi))) {
     country <- paesi[i]
     cat("\n Country: ",country,"\n")
     # seleziono dal master le vaariabili che possono essere utili
-    m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS2_24","NUTS3_21",
+    m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS2_24","NUTS3_24",
                                              "ELEV2","N2K_SITETYPE",
                                              "IMP18_10_cl", "IBU18_10","GRA18_10","FTY18_10",
                                              "CLC18_1d","BCK18_R","BCK21_R")]
@@ -235,7 +237,7 @@ for (i in c(1:length(paesi))) {
     # eliminate empty levels in factor variables in m 
     m<-droplevels(m)
     # select country sample with variables of interest
-    s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","NUTS1_24",
+    s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","NUTS1_24","SURVEY_OBS_TYPE",
                         "SURVEY_LC1","SURVEY_LU1","SURVEY_LC1_1","SURVEY_LU1_1",
                         "SURVEY_LC1_2","SURVEY_LU1_2","SURVEY_LC1_3","SURVEY_LU1_3",
                         "WGT_LUCAS", "STRATUM_LUCAS","settlement","fao_class_name",
@@ -391,20 +393,20 @@ for (i in c(1:length(paesi))) {
       df <- as.data.frame(df)
       filename <- paste(country,"_calibrated_wgts_2022.txt",sep="")
       write.table(df,file = file.path(direnew2, filename),sep="\t",quote=FALSE,row.names=FALSE,dec=".")
-      filename<- paste(country,"_des.Rdata",sep="")
-      save(des,file=file.path(direnew3, filename))
-      filename<- paste(country,"_cal.Rdata",sep="")
-      save(cal,file=file.path(direnew3, filename))
+      # filename<- paste(country,"_des.Rdata",sep="")
+      # save(des,file=file.path(direnew3, filename))
+      # filename<- paste(country,"_cal.Rdata",sep="")
+      # save(cal,file=file.path(direnew3, filename))
       ##########################   
       # ESTIMATION
       ##########################   
       est_LC1_LU1 <- svystatTM(cal, ~ area +
                                  SURVEY_LC1_1+
                                  SURVEY_LU1_1+
-                                 SURVEY_LC1_2+
-                                 SURVEY_LU1_2+
-                                 SURVEY_LC1_3+
-                                 SURVEY_LU1_3+
+                                 # SURVEY_LC1_2+
+                                 # SURVEY_LU1_2+
+                                 # SURVEY_LC1_3+
+                                 # SURVEY_LU1_3+
                                settlement+
                                settl_pc+
                                fao_class_name+
@@ -417,10 +419,10 @@ for (i in c(1:length(paesi))) {
       est_LC1_LU1_NUTS1_24 <- svystatTM(cal, ~ area +
                                           SURVEY_LC1_1+
                                           SURVEY_LU1_1+
-                                          SURVEY_LC1_2+
-                                          SURVEY_LU1_2+
-                                          SURVEY_LC1_3+
-                                          SURVEY_LU1_3+
+                                          # SURVEY_LC1_2+
+                                          # SURVEY_LU1_2+
+                                          # SURVEY_LC1_3+
+                                          # SURVEY_LU1_3+
                                         settlement+
                                         fao_class_name+
                                         lue+
@@ -430,14 +432,18 @@ for (i in c(1:length(paesi))) {
                                         vartype=c("se","cv"),
                                         conf.int= TRUE,
                                         conf.lev= 0.95)
+      est_LC1_LU1_NUTS1_24_t <- as.data.frame(t(est_LC1_LU1_NUTS1_24))
+      est_LC1_LU1_NUTS1_24_t <- est_LC1_LU1_NUTS1_24_t[-1,]
+      est_LC1_LU1_NUTS1_24_t$variable <- row.names(est_LC1_LU1_NUTS1_24_t)
+      est_LC1_LU1_NUTS1_24_t$variable[1] <- "variable"
       
       est_LC1_LU1_NUTS2_24 <- svystatTM(cal, ~ area +
                                           SURVEY_LC1_1+
                                           SURVEY_LU1_1+
-                                          SURVEY_LC1_2+
-                                          SURVEY_LU1_2+
-                                          SURVEY_LC1_3+
-                                          SURVEY_LU1_3+
+                                          # SURVEY_LC1_2+
+                                          # SURVEY_LU1_2+
+                                          # SURVEY_LC1_3+
+                                          # SURVEY_LU1_3+
                                         settlement+
                                         fao_class_name+
                                         lue+
@@ -447,24 +453,35 @@ for (i in c(1:length(paesi))) {
                                         vartype=c("se","cv"),
                                         conf.int= TRUE, 
                                         conf.lev= 0.95)
-      
-      filename <- paste(country,'_est_LC1_LU1_2022.csv',sep="")
-      write.svystat(est_LC1_LU1,file = file.path(direnew1, filename),sep=",",dec=".")
-      
-      # Transposed ----------------------------------------------
-      est_LC1_LU1_NUTS1_24_t <- as.data.frame(t(est_LC1_LU1_NUTS1_24))
-      filename <- paste(country,"_est_LC1_LU1_NUTS1_24_2022_t.csv",sep="")
-      est_LC1_LU1_NUTS1_24_t$variable <- row.names(est_LC1_LU1_NUTS1_24_t)
-      est_LC1_LU1_NUTS1_24_t$variable[1] <- "variable"
-      write.table(est_LC1_LU1_NUTS1_24_t,file = file.path(direnew1, filename),sep=",",dec=".",
-                 row.names=FALSE,col.names=FALSE,quote=FALSE)
-      #-----------------------------------------------------------
       est_LC1_LU1_NUTS2_24_t <- as.data.frame(t(est_LC1_LU1_NUTS2_24))
-      filename <- paste(country,"_est_LC1_LU1_NUTS2_24_2022_t.csv",sep="")
+      est_LC1_LU1_NUTS2_24_t <- est_LC1_LU1_NUTS2_24_t[-1,]
       est_LC1_LU1_NUTS2_24_t$variable <- row.names(est_LC1_LU1_NUTS2_24_t)
       est_LC1_LU1_NUTS2_24_t$variable[1] <- "variable"
-      write.table(est_LC1_LU1_NUTS2_24_t,file = file.path(direnew1, filename),sep=",",dec=".",
-                  row.names=FALSE,col.names=FALSE,quote=FALSE)
+      
+      #---------------------------------------------------------------
+      # 2nd PHASE
+      #---------------------------------------------------------------
+      source("1.estimates_by_country_twoPhases_secondPhase_simplified.R")
+      
+      #---------------------------------------------------------------
+      # Join outputs and write them
+      #---------------------------------------------------------------
+      filename <- paste(country,'_est_LC1_LU1_2022.csv',sep="")
+      tot1 <- rbind(est_LC1_LU1,est_LC1_LU1_2nd)
+      write.svystat(tot1,file = file.path(direnew1, filename),sep=",",dec=".")
+      
+      # Transposed ----------------------------------------------
+      filename <- paste(country,"_est_LC1_LU1_NUTS1_24_2022_t.csv",sep="")
+      tot2 <- rbind(est_LC1_LU1_NUTS1_24_t,est_LC1_LU1_NUTS1_24_2nd_t)
+
+      write.table(tot2,file = file.path(direnew1, filename),sep=",",dec=".",
+                 row.names=FALSE,col.names=TRUE,quote=FALSE)
+      #-----------------------------------------------------------
+      filename <- paste(country,"_est_LC1_LU1_NUTS2_24_2022_t.csv",sep="")
+      tot3 <- rbind(est_LC1_LU1_NUTS2_24_t,est_LC1_LU1_NUTS2_24_2nd_t)
+      write.table(tot3,file = file.path(direnew1, filename),sep=",",dec=".",
+                  row.names=FALSE,col.names=TRUE,quote=FALSE)
+
 }
 end_time <- Sys.time() 
 execution_time <- end_time - start_time 

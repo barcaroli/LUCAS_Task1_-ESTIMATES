@@ -1,5 +1,5 @@
 
-R version 4.4.1 (2024-06-14 ucrt) -- "Race for Your Life"
+R version 4.4.0 (2024-04-24 ucrt) -- "Puppy Cup"
 Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64
 
@@ -15,8 +15,6 @@ Scrivi 'demo()' per una dimostrazione, 'help()' per la guida
 oppure 'help.start()' per la guida nel browser HTML.
 Scrivi 'q()' per uscire da R.
 
-[Caricato workspace precedentemente salvato]
-
 > ##############################################################
 > # LUCAS - Calibration and estimation by country 2022
 > ##############################################################
@@ -28,6 +26,8 @@ In options(stringsAsFactors = TRUE) :
 > library(data.table)
 > library(sf)
 Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.3.1; sf_use_s2() is TRUE
+Messaggio di avvertimento:
+il pacchetto 'sf' è stato creato con R versione 4.4.1 
 > library(ReGenesees)
 
 
@@ -72,27 +72,27 @@ License: EUPL
 Imports: stats, MASS
 Depends: R (>= 3.5.0)
 ByteCompile: TRUE
-NeedsCompilation: no
-Packaged: 2024-06-07 13:49:17 UTC; Giulio
-Built: R 4.4.0; ; 2024-06-07 13:49:22 UTC; windows
 RemoteType: github
 RemoteHost: api.github.com
 RemoteRepo: ReGenesees
 RemoteUsername: DiegoZardetto
-RemotePkgRef: DiegoZardetto/ReGenesees
 RemoteRef: HEAD
 RemoteSha: b1483af97a5aac09134c22d4238d12bd351f3a95
 GithubRepo: ReGenesees
 GithubUsername: DiegoZardetto
 GithubRef: HEAD
 GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
+NeedsCompilation: no
+Packaged: 2024-05-25 10:30:07 UTC; UTENTE
+Built: R 4.4.0; ; 2024-05-25 10:30:12 UTC; windows
 
 > library(openxlsx)
 > 
-> setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
-> path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+> # setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+> # path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 > 
-> 
+> setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+> path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
 > # Prepare the path for the output
 > dire <- getwd()
 > direnew1 <- paste(dire, "/estimates2022", sep = "")
@@ -124,13 +124,13 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
   B54   B55   B71   B72   B73   B74   B75   B76   B77   B81   B82   B83   B84 
   584  4285  1304   231   398  1120   965   162    85  2750  1836   160   171 
   Bx1   Bx2     C    C1   C10    C2   C20   C21   C22   C23    C3   C31   C32 
-26091  1802   395   120 62326  2470     1  9699 13212  3130  2550  6327  5256 
+26091  1802   395   120 62323  2470     1  9699 13212  3129  2550  6327  5256 
   C33     D    D1   D10    D2   D20     E    E1   E10    E2   E20    E3   E30 
- 4987    24    39 10745    43 19297    72    46 12024   125 77405    15 10683 
+ 4987    24    39 10745    43 19296    72    46 12024   125 77403    15 10683 
     F    F1   F10    F2   F20    F3   F30    F4   F40     G    G1   G10   G11 
-   11     6  3140     2   578     1  1200    19 13534     6    11     2 12795 
+   11     6  3139     2   578     1  1200    19 13534     6    11     2 12794 
   G12    G2   G20   G21   G22   G30   G40   G50     H   H11   H12   H21   H22 
-  114     9     1  3733    26    48    53   170     7  3527  3875   375    91 
+  114     9     1  3732    26    48    53   170     7  3527  3875   375    91 
   H23 
    76 
 > s2022$SURVEY_LC1 <- ifelse(nchar(as.character(s2022$SURVEY_LC1)) == 2,
@@ -148,13 +148,13 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
   B55   B71   B72   B73   B74   B75   B76   B77   B81   B82   B83   B84   Bx1 
  4285  1304   231   398  1120   965   162    85  2750  1836   160   171 26091 
   Bx2   Bxx   C10   C1x   C20   C21   C22   C23   C2x   C31   C32   C33   C3x 
- 1802   163 62326   120     1  9699 13212  3130  2470  6327  5256  4987  2550 
+ 1802   163 62323   120     1  9699 13212  3129  2470  6327  5256  4987  2550 
   Cxx   D10   D1x   D20   D2x   Dxx   E10   E1x   E20   E2x   E30   E3x   Exx 
-  395 10745    39 19297    43    24 12024    46 77405   125 10683    15    72 
+  395 10745    39 19296    43    24 12024    46 77403   125 10683    15    72 
   F10   F1x   F20   F2x   F30   F3x   F40   F4x   Fxx   G10   G11   G12   G1x 
- 3140     6   578     2  1200     1 13534    19    11     2 12795   114    11 
+ 3139     6   578     2  1200     1 13534    19    11     2 12794   114    11 
   G20   G21   G22   G2x   G30   G40   G50   Gxx   H11   H12   H21   H22   H23 
-    1  3733    26     9    48    53   170     6  3527  3875   375    91    76 
+    1  3732    26     9    48    53   170     6  3527  3875   375    91    76 
   Hxx 
     7 
 > 
@@ -171,16 +171,16 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > table(s2022$SURVEY_LC1_1, useNA="ifany")
 
      A      B      C      D      E      F      G      H 
- 19474  95708 110473  30148 100370  18491  16968   7951 
+ 19474  95708 110469  30147 100368  18490  16966   7951 
 > s2022$SURVEY_LC1_2 <- as.factor(substr(as.character(s2022$SURVEY_LC1),1,2))
 > table(s2022$SURVEY_LC1_2, useNA="ifany")
 
    A1    A2    A3    Ax    B1    B2    B3    B4    B5    B7    B8    Bx    C1 
- 4557 13403  1504    10 36652  2838  8728  1869  8383  4265  4917 28056 62446 
+ 4557 13403  1504    10 36652  2838  8728  1869  8383  4265  4917 28056 62443 
    C2    C3    Cx    D1    D2    Dx    E1    E2    E3    Ex    F1    F2    F3 
-28512 19120   395 10784 19340    24 12070 77530 10698    72  3146   580  1201 
+28511 19120   395 10784 19339    24 12070 77528 10698    72  3145   580  1201 
    F4    Fx    G1    G2    G3    G4    G5    Gx    H1    H2    Hx 
-13553    11 12922  3769    48    53   170     6  7402   542     7 
+13553    11 12921  3768    48    53   170     6  7402   542     7 
 > s2022$SURVEY_LC1_3 <- as.factor(substr(as.character(s2022$SURVEY_LC1),1,3))
 > table(s2022$SURVEY_LC1_3, useNA="ifany")
 
@@ -193,38 +193,38 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
   B55   B71   B72   B73   B74   B75   B76   B77   B81   B82   B83   B84   Bx1 
  4285  1304   231   398  1120   965   162    85  2750  1836   160   171 26091 
   Bx2   Bxx   C10   C1x   C20   C21   C22   C23   C2x   C31   C32   C33   C3x 
- 1802   163 62326   120     1  9699 13212  3130  2470  6327  5256  4987  2550 
+ 1802   163 62323   120     1  9699 13212  3129  2470  6327  5256  4987  2550 
   Cxx   D10   D1x   D20   D2x   Dxx   E10   E1x   E20   E2x   E30   E3x   Exx 
-  395 10745    39 19297    43    24 12024    46 77405   125 10683    15    72 
+  395 10745    39 19296    43    24 12024    46 77403   125 10683    15    72 
   F10   F1x   F20   F2x   F30   F3x   F40   F4x   Fxx   G10   G11   G12   G1x 
- 3140     6   578     2  1200     1 13534    19    11     2 12795   114    11 
+ 3139     6   578     2  1200     1 13534    19    11     2 12794   114    11 
   G20   G21   G22   G2x   G30   G40   G50   Gxx   H11   H12   H21   H22   H23 
-    1  3733    26     9    48    53   170     6  3527  3875   375    91    76 
+    1  3732    26     9    48    53   170     6  3527  3875   375    91    76 
   Hxx 
     7 
 > s2022$SURVEY_LU1_1 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,2))
 > table(s2022$SURVEY_LU1_1, useNA="ifany")
 
     U1     U2     U3     U4 
-274605   1740  45927  77311 
+274601   1740  45925  77307 
 > s2022$SURVEY_LU1_2 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,3))
 > table(s2022$SURVEY_LU1_2, useNA="ifany")
 
    U11    U12    U13    U14    U15    U21    U22    U31    U32    U33    U34 
-186660  84568   1501   1783     93    898    842  16000    757    583   1226 
+186659  84566   1500   1783     93    898    842  15999    757    583   1226 
    U35    U36    U37    U41    U42 
-  2954  10145  14262   3754  73557 
+  2953  10145  14262   3754  73553 
 > s2022$SURVEY_LU1_3 <- as.factor(substr(as.character(s2022$SURVEY_LU1),1,4))
 > table(s2022$SURVEY_LU1_3, useNA="ifany")
 
   U111   U112   U113   U120   U130   U140   U150   U210   U221   U222   U223 
-179335   5197   2128  84568   1501   1783     93    898    113     23    139 
+179334   5197   2128  84566   1500   1783     93    898    113     23    139 
   U224   U225   U226   U227   U228   U311   U312   U313   U314   U315   U316 
-   108    116    199    135      9    650  10635   2204    351     12     24 
+   108    116    199    135      9    650  10635   2203    351     12     24 
   U317   U318   U319   U321   U322   U330   U341   U342   U350   U361   U362 
-   749    298   1077    498    259    583   1147     79   2954   8813   1332 
+   749    298   1077    498    259    583   1147     79   2953   8813   1332 
   U370   U411   U412   U413   U414   U415   U420 
- 14262    251     44     68    368   3023  73557 
+ 14262    251     44     68    368   3023  73553 
 > ###########################################################
 > s2022$fao_class_name <- as.factor(s2022$fao_class_name)
 > s2022$settlement <- as.factor(s2022$settlement)
@@ -243,16 +243,16 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > ###########################################################
 > # Calculate fpc
 > ###########################################################
-> num<-aggregate(s2022$ones,by=list(s2022$STRATUM_LUCAS),FUN=sum)
-> num$n=num$x
-> num$x<-NULL
-> den<-aggregate(s2022$WGT_LUCAS,by=list(s2022$STRATUM_LUCAS),FUN=sum)
-> den$N=den$x
-> den$x<-NULL
-> fpc<-merge(num,den,by="Group.1")
-> fpc$STRATUM_LUCAS<-fpc$Group.1
-> fpc$fpc=fpc$n/fpc$N
-> s2022<-merge(s2022,fpc[,c("STRATUM_LUCAS","fpc")],by="STRATUM_LUCAS")
+> # num<-aggregate(s2022$ones,by=list(s2022$STRATUM_LUCAS),FUN=sum)
+> # num$n=num$x
+> # num$x<-NULL
+> # den<-aggregate(s2022$WGT_LUCAS,by=list(s2022$STRATUM_LUCAS),FUN=sum)
+> # den$N=den$x
+> # den$x<-NULL
+> # fpc<-merge(num,den,by="Group.1")
+> # fpc$STRATUM_LUCAS<-fpc$Group.1
+> # fpc$fpc=fpc$n/fpc$N
+> # s2022<-merge(s2022,fpc[,c("STRATUM_LUCAS","fpc")],by="STRATUM_LUCAS")
 > 
 > ################################################################
 > # Read areas
@@ -263,28 +263,26 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > #########################################
 > # MASTER
 > #########################################
-> load(paste0(path_data,"Master_con_hrl_e_NUTS24.RData"))
-> master<-Master_con_hrl_e_NUTS24
-> rm(Master_con_hrl_e_NUTS24)
+> # load(paste0(path_data,"Master_con_hrl_e_NUTS24.RData"))
+> # master<-Master_con_hrl_e_NUTS24
+> # rm(Master_con_hrl_e_NUTS24)
+> load(paste0(path_data,"master_complete.RData"))
+> 
 > table(master$NUTS0_24,useNA="ifany")
 
-    AL     AT     BE     BG     CH     CY     CZ     DE     DK     EE     EL 
-     4  20982   7679  27743     11   2317  19713  89431  10804  11329  32938 
-    ES     FI     FR     HR     HU     IE     IT     LT     LU     LV     MK 
-126474  84359 137247  14146  23263  17463  75141  16230    651  16144      2 
-    MT     NL     NO     PL     PT     RO     RS     SE     SI     SK     TR 
-    80   9329      6  77993  22966  59589     14 112420   5073  12259      5 
-  <NA> 
- 61241 
+    AT     BE     BG     CY     CZ     DE     DK     EE     EL     ES     FI 
+ 20982   7674  27729   1373  19716  89409  10776  11325  32848 124553  84330 
+    FR     HR     HU     IE     IT     LT     LU     LV     MT     NL     PL 
+137039  14135  23268  17435  75036  16234    644  16136     80   8929  77964 
+    PT     RO     SE     SI     SK 
+ 22142  59561 112385   5062  12265 
 > c <- master[master$NUTS0_24=="",]
 > table(c$NUTS0_16,useNA="ifany")
 
-         AL    AT    BE    BG    CH    CY    CZ    DE    DK    EE    EL    ES 
-    0     0     0     0     0     0     0     0     0     0     0     0     0 
-   FI    FR    HR    HU    IE    IT    LT    LU    LV    MT    NL    PL    PT 
-    0     0     0     0     0     0     0     0     0     0     0     0     0 
-   RO    RS    SE    SI    SK    TR    UK  <NA> 
-    0     0     0     0     0     0     0 61241 
+   AL AT BE BG CH CY CZ DE DK EE EL ES FI FR HR HU IE IT LT LU LV MT NL PL PT 
+ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+RO RS SE SI SK TR UK 
+ 0  0  0  0  0  0  0 
 > ################################
 > # geovisualize master points
 > ################################
@@ -373,8 +371,8 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > # Eliminate Master points with NA in point_area
 > ###########################################################################
 > summary(master$point_area)
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-  3.767   3.994   4.001   4.001   4.005   4.691      32 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  3.767   3.994   4.001   4.001   4.005   4.691 
 > a <- master[is.na(master$point_area),]
 > master <- master[!is.na(master$point_area),]
 > 
@@ -391,6 +389,7 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > 
 > master$CLC18_1d<-factor(substr(master$CLC18_vett,1,1))
 > master$NUTS0_24 <- factor(master$NUTS0_24)
+> master$NUTS1_24 <- factor(master$NUTS1_24)
 > master$NUTS2_24 <- factor(master$NUTS2_24)
 > master$NUTS3_24 <- factor(master$NUTS3_24)
 > master$BCK18_R <- factor(master$BCK18_R)
@@ -406,15 +405,15 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 > ##########
 > 
 > paesi <- levels(as.factor(s2022$NUTS0_24))
-> i = which(paesi=="EE")
+> i = which(paesi=="AT")
 > i
-[1] 8
+[1] 1
 > 
 > for (i in c(1:length(paesi))) {
 +     country <- paesi[i]
 +     cat("\n Country: ",country,"\n")
 +     # seleziono dal master le vaariabili che possono essere utili
-+     m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS2_24","NUTS3_21",
++     m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24",
 +                                              "ELEV2","N2K_SITETYPE",
 +                                              "IMP18_10_cl", "IBU18_10","GRA18_10","FTY18_10",
 +                                              "CLC18_1d","BCK18_R","BCK21_R")]
@@ -424,7 +423,7 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 +     # eliminate empty levels in factor variables in m 
 +     m<-droplevels(m)
 +     # select country sample with variables of interest
-+     s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","NUTS1_24",
++     s <- merge(s2022[,c("POINT_ID","fpc","Pop2023",
 +                         "SURVEY_LC1","SURVEY_LU1","SURVEY_LC1_1","SURVEY_LU1_1",
 +                         "SURVEY_LC1_2","SURVEY_LU1_2","SURVEY_LC1_3","SURVEY_LU1_3",
 +                         "WGT_LUCAS", "STRATUM_LUCAS","settlement","fao_class_name",
@@ -580,10 +579,10 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 +       df <- as.data.frame(df)
 +       filename <- paste(country,"_calibrated_wgts_2022.txt",sep="")
 +       write.table(df,file = file.path(direnew2, filename),sep="\t",quote=FALSE,row.names=FALSE,dec=".")
-+       filename<- paste(country,"_des.Rdata",sep="")
-+       save(des,file=file.path(direnew3, filename))
-+       filename<- paste(country,"_cal.Rdata",sep="")
-+       save(cal,file=file.path(direnew3, filename))
++       # filename<- paste(country,"_des.Rdata",sep="")
++       # save(des,file=file.path(direnew3, filename))
++       # filename<- paste(country,"_cal.Rdata",sep="")
++       # save(cal,file=file.path(direnew3, filename))
 +       ##########################   
 +       # ESTIMATION
 +       ##########################   
@@ -657,8 +656,7 @@ GithubSHA1: b1483af97a5aac09134c22d4238d12bd351f3a95
 + }
 
  Country:  AT 
-
-# All lonely strata (5) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -667,8 +665,7 @@ All Calibration Constraints (23) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  BE 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -686,16 +683,12 @@ All Calibration Constraints (22) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  CY 
-
-# Empty levels found in factors: BCK21_R
-# Empty levels have been dropped!
-
 # No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
 
-Calibration Constraints missed (at tolerance level epsilon = 1e-07): 1 out of 18
+Calibration Constraints missed (at tolerance level epsilon = 1e-07): 7 out of 17
 - Summary of mismatches: 
 
 $return.code
@@ -704,17 +697,28 @@ code      1
 
 $fail.diagnostics
 $fail.diagnostics$global
-                Variable Population.Total Achieved.Estimate Difference
-16 point_area:BCK21_R253         7.987052                 0  -7.987052
-   Relative.Difference
-16          -0.8887288
+           Variable Population.Total Achieved.Estimate Difference
+7 point_area:ELEV26         23.96116          562.5167   538.5555
+6 point_area:ELEV25        279.54683          818.1023   538.5555
+3 point_area:ELEV22        658.93181         1197.4873   538.5555
+2 point_area:ELEV21        870.58869         1409.1442   538.5555
+5 point_area:ELEV24       1485.59171         2024.1472   538.5555
+4 point_area:ELEV23       2164.49115         2703.0467   538.5555
+1        point_area       9253.00000         8714.4445  -538.5555
+  Relative.Difference
+7         21.57574380
+6          1.91966356
+3          0.81607753
+2          0.61790100
+5          0.36227534
+4          0.24869902
+1         -0.05819705
 
 
 
 
  Country:  CZ 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -723,8 +727,7 @@ All Calibration Constraints (21) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  DE 
-
-# All lonely strata (3) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -760,8 +763,7 @@ All Calibration Constraints (29) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  ES 
-
-# All lonely strata (2) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -779,8 +781,7 @@ All Calibration Constraints (20) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  FR 
-
-# All lonely strata (2) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -789,8 +790,7 @@ All Calibration Constraints (39) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  HR 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -799,8 +799,7 @@ All Calibration Constraints (20) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  HU 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -818,8 +817,7 @@ All Calibration Constraints (16) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  IT 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -828,8 +826,7 @@ All Calibration Constraints (38) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  LT 
-
-# All lonely strata (2) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -847,8 +844,7 @@ All Calibration Constraints (1) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  LV 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -875,36 +871,16 @@ All Calibration Constraints (24) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  PL 
-
-# Empty levels found in factors: BCK21_R
-# Empty levels have been dropped!
-
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
 
-Calibration Constraints missed (at tolerance level epsilon = 1e-07): 1 out of 32
-- Summary of mismatches: 
-
-$return.code
-     global
-code      1
-
-$fail.diagnostics
-$fail.diagnostics$global
-                Variable Population.Total Achieved.Estimate Difference
-30 point_area:BCK21_R253         8.002643                 0  -8.002643
-   Relative.Difference
-30          -0.8889215
-
-
+All Calibration Constraints (31) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  PT 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -913,8 +889,7 @@ All Calibration Constraints (23) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  RO 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -923,8 +898,7 @@ All Calibration Constraints (22) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  SE 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -933,8 +907,7 @@ All Calibration Constraints (25) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  SI 
-
-# All lonely strata (1) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
@@ -943,20 +916,19 @@ All Calibration Constraints (18) fulfilled (at tolerance level epsilon = 1e-07).
 
 
  Country:  SK 
-
-# All lonely strata (2) successfully collapsed!
+# No lonely PSUs found!
 
 
 # Coherence check between 'universe' and 'template': OK
 
 All Calibration Constraints (18) fulfilled (at tolerance level epsilon = 1e-07).
 
-Ci sono stati 19 avvertimenti (utilizza warnings() per visualizzarli)
+Ci sono stati 28 avvertimenti (utilizza warnings() per visualizzarli)
 > end_time <- Sys.time() 
 > execution_time <- end_time - start_time 
 > print(execution_time)
-Time difference of 2.015065 hours
+Time difference of 4.271754 hours
 > 
 > proc.time()
    utente   sistema trascorso 
-  6746.04    456.23   7276.18 
+  8434.09   3779.37  15378.50 

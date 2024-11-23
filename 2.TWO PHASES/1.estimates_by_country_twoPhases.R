@@ -100,9 +100,10 @@ areas <- read.csv(paste0(path_data,"areas_2015_2024.csv"),colClasses = c(rep('ch
 #########################################
 # MASTER
 #########################################
-load(paste0(path_data,"Master_con_hrl_e_NUTS24.RData"))
-master<-Master_con_hrl_e_NUTS24
-rm(Master_con_hrl_e_NUTS24)
+# load(paste0(path_data,"Master_con_hrl_e_NUTS24.RData"))
+# master<-Master_con_hrl_e_NUTS24
+# rm(Master_con_hrl_e_NUTS24)
+load(paste0(path_data,"master_complete.RData"))
 table(master$NUTS0_24,useNA="ifany")
 c <- master[master$NUTS0_24=="",]
 table(c$NUTS0_16,useNA="ifany")
@@ -205,6 +206,7 @@ master$ELEV2 <- as.factor(master$ELEV2)
 
 master$CLC18_1d<-factor(substr(master$CLC18_vett,1,1))
 master$NUTS0_24 <- factor(master$NUTS0_24)
+master$NUTS1_24 <- factor(master$NUTS1_24)
 master$NUTS2_24 <- factor(master$NUTS2_24)
 master$NUTS3_24 <- factor(master$NUTS3_24)
 master$BCK18_R <- factor(master$BCK18_R)
@@ -227,7 +229,7 @@ for (i in c(1:length(paesi))) {
     country <- paesi[i]
     cat("\n Country: ",country,"\n")
     # seleziono dal master le vaariabili che possono essere utili
-    m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS2_24","NUTS3_24",
+    m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24",
                                              "ELEV2","N2K_SITETYPE",
                                              "IMP18_10_cl", "IBU18_10","GRA18_10","FTY18_10",
                                              "CLC18_1d","BCK18_R","BCK21_R")]
@@ -237,7 +239,7 @@ for (i in c(1:length(paesi))) {
     # eliminate empty levels in factor variables in m 
     m<-droplevels(m)
     # select country sample with variables of interest
-    s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","NUTS1_24","SURVEY_OBS_TYPE",
+    s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","SURVEY_OBS_TYPE",
                         "SURVEY_LC1","SURVEY_LU1","SURVEY_LC1_1","SURVEY_LU1_1",
                         "SURVEY_LC1_2","SURVEY_LU1_2","SURVEY_LC1_3","SURVEY_LU1_3",
                         "WGT_LUCAS", "STRATUM_LUCAS","settlement","fao_class_name",

@@ -1,7 +1,7 @@
 ##############################################################
 # LUCAS - Calibration and estimation by country 2022
 ##############################################################
-start_time <- Sys.time()
+start_time <- Sys.time() 
 options(stringsAsFactors = TRUE)
 library(data.table)
 library(sf)

@@ -1,11 +1,11 @@
 ######################################################################
 # LUCAS - Produce concatenate (2009 / 2022) estimates for each country
 ######################################################################
-setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
-path_previous_estimates <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
-# path_previous_estimates <- "D:/Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
-# path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+# setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
+# path_previous_estimates <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
+path_previous_estimates <- "D:/Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
+path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 
 dire <- getwd()
 direnew1 <- paste(dire, "\\allyears_estimates\\", sep = "")

@@ -1,29 +1,29 @@
 ##############################################################
 # LUCAS - Calibration and estimation by country 2022
 ##############################################################
-start_time <- Sys.time() 
+start_time <- Sys.time()
 options(stringsAsFactors = TRUE)
 library(data.table)
 library(sf)
 library(ReGenesees)
 library(openxlsx)
 
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
-# path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 
-setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
-path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
+# setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
+# path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
 # Prepare the path for the output
 dire <- getwd()
 direnew1 <- paste(dire, "/estimates2022", sep = "")
-if (dir.exists(direnew1))
-  unlink(direnew1,recursive=TRUE)
+# if (dir.exists(direnew1))
+#   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1))
   dir.create(direnew1)
 # 
 direnew2 <- paste(dire, "/weights2022", sep = "")
-if (dir.exists(direnew2))
-  unlink(direnew2,recursive=TRUE)
+# if (dir.exists(direnew2))
+#   unlink(direnew2,recursive=TRUE)
 if (!dir.exists(direnew2))
   dir.create(direnew2)
 
@@ -235,7 +235,7 @@ for (i in c(1:length(paesi))) {
                                              "CLC18_1d","BCK18_R","BCK21_R")]
     ##########################################
     m <- m[!is.na(m$NUTS2_24),]
-    m$geometry<-NULL
+    # m$geometry<-NULL
     # eliminate empty levels in factor variables in m 
     m<-droplevels(m)
     # select country sample with variables of interest
@@ -259,6 +259,7 @@ for (i in c(1:length(paesi))) {
     ###############   
     # CALIBRATION
     ###############
+    s <- s[order(s$STRATUM_LUCAS),]
     if (length(levels(s$NUTS2_24)) > 1) {
         # design
         des <- e.svydesign(data=s, 

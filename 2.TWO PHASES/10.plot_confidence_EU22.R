@@ -1,3 +1,8 @@
+#---------------------------------
+# Script to plot LUCAS
+# EU 22 countries LC and LU estimates
+# 009 - 2012 - 2015 - 2018 -2022
+#---------------------------------
 plotCI <- function(df,
                    y,
                    ci_l,

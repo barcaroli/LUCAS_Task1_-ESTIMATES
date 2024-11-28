@@ -8,10 +8,10 @@ library(sf)
 library(ReGenesees)
 library(openxlsx)
 
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD")
-setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
-# path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
-path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
+# setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
+path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+# path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
 
 
 # Prepare the path for the output
@@ -157,6 +157,7 @@ s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS
 s2022$NUTS0_24 <- as.factor(s2022$NUTS0_24)
 s2022$NUTS1_24 <- as.factor(s2022$NUTS1_24)
 s2022$NUTS2_24 <- as.factor(s2022$NUTS2_24)
+s2022$NUTS3_24 <- as.factor(s2022$NUTS3_24)
 a <- s2022[is.na(s2022$NUTS2_24),]
 b <- master[is.na(master$NUTS2_24),]
 
@@ -183,8 +184,8 @@ master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
 ###########################################################################
 # exclusion of some NUTS2  --> ask for confirm!
 ###########################################################################
-excl_nuts2 <- c("ES63","ES64","ES70","FR9","PT20","PT30") 
-master <- master[!(master$NUTS2_24 %in% excl_nuts2),]
+# excl_nuts2 <- c("ES63","ES64","ES70","FR9","PT20","PT30") 
+# master <- master[!(master$NUTS2_24 %in% excl_nuts2),]
 
 ###########################################################################
 # Eliminate Master points with NA in point_area
@@ -222,7 +223,7 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="BE")
+i = which(paesi=="CY")
 i
 
 for (i in c(1:length(paesi))) {
@@ -235,7 +236,7 @@ for (i in c(1:length(paesi))) {
                                              "CLC18_1d","BCK18_R","BCK21_R")]
     ##########################################
     m <- m[!is.na(m$NUTS2_24),]
-    m$geometry<-NULL
+    # m$geometry<-NULL
     # eliminate empty levels in factor variables in m 
     m<-droplevels(m)
     # select country sample with variables of interest
@@ -259,6 +260,7 @@ for (i in c(1:length(paesi))) {
     ###############   
     # CALIBRATION
     ###############
+    s <- s[order(s$STRATUM_LUCAS),]
     if (length(levels(s$NUTS2_24)) > 1) {
         # design
         des <- e.svydesign(data=s, 
@@ -269,6 +271,7 @@ for (i in c(1:length(paesi))) {
                            fpc= ~fpc, 
                            check.data= TRUE)
         ls <- find.lon.strata(des)
+        # if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
         if (!is.null(ls)) des <- collapse.strata(des)
         
         levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
@@ -322,13 +325,13 @@ for (i in c(1:length(paesi))) {
                          fpc= ~fpc, 
                          check.data= TRUE)
       ls <- find.lon.strata(des)
-      if (!is.null(ls)) des <- collapse.strata(des)
+      if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
       
       levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
       levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
       levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
       # known totals for all countries except EE, LU, LV
-      if (!i %in% c(8,18,19)) {
+      if (!i %in% c(4,8,18,19)) {
           poptemp <- pop.template(data=des,
                                   calmodel=   ~ 
                                     point_area +
@@ -358,7 +361,7 @@ for (i in c(1:length(paesi))) {
                              bounds =   c(0.01,50)
           )
       }
-          # known totals for EE, LU, LV
+      # known totals for EE, LU, LV
       if (i %in% c(8,18,19)) {
         poptemp <- pop.template(data=des,
                                 calmodel=   ~ 
@@ -374,7 +377,30 @@ for (i in c(1:length(paesi))) {
                            calfun= "linear",
                            bounds =   c(0.01,50)
          )
-        }
+      }
+      # known totals for CY
+      if (i == 4) {
+        poptemp <- pop.template(data=des,
+                                calmodel=   ~ 
+                                  point_area +
+                                  point_area:(
+                                      GRA18_10+
+                                      FTY18_10) - 1,)
+        # fill with the master
+        popfill <- fill.template(universe=m, template= poptemp)
+        popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+        # calibration
+        cal <- e.calibrate(design=des, 
+                           df.population= popfill, 
+                           calmodel=   ~ 
+                             point_area +
+                             point_area:(
+                                 GRA18_10+
+                                 FTY18_10) - 1,
+                           calfun= "linear",
+                           bounds =   c(0.01,50)
+            )
+         }
       }
       check.cal(cal)
       UWE(cal)
@@ -385,6 +411,7 @@ for (i in c(1:length(paesi))) {
       cal$prob <- cal$prob/cal$variables$point_area
       sum(weights(cal))
       summary(weights(cal))
+      s$cal_wgt <- weights(cal)
       
       ##########################   
       # write calibrated weights

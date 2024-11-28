@@ -15,14 +15,17 @@
 # Select only Field
 s2 <- s[s$SURVEY_OBS_TYPE == 1,]
 # design
+s2 <- s2[order(s2$STRATUM_LUCAS),]
 des2 <- e.svydesign(data=s2, 
                     ids= ~ POINT_ID, 
                     strata= ~ STRATUM_LUCAS, 
-                    weights = ~ WGT_LUCAS, 
+                    # weights = ~ WGT_LUCAS,
+                    weights = ~ cal_wgt,
                     self.rep.str= NULL, 
                     fpc= ~fpc, 
                     check.data= TRUE)
 ls <- find.lon.strata(des2)
+print(ls)
 if (!is.null(ls)) des2 <- collapse.strata(des2)
 
 
@@ -41,14 +44,15 @@ cal2 <- e.calibrate(design=des2,
                      calmodel=   ~
                        SURVEY_LC1_1 +
                        SURVEY_LU1_1 - 1,
-                     calfun= 'linear', bounds =   c(0.5,Inf))
+                     calfun= 'linear', bounds =   c(0.05,Inf))
 check.cal(cal2)
+print(a)
 UWE(cal2)
 summary(s$WGT_LUCAS)
 sum(s$WGT_LUCAS)
 sum(m$ones)
 sum(m$point_area)
-cal$prob <- cal2$prob/cal2$variables$point_area
+# cal2$prob <- cal2$prob/cal2$variables$point_area
 sum(weights(cal2))
 summary(weights(cal2))
 
@@ -74,7 +78,7 @@ est_LC1_LU1_2nd <- svystatTM(des3, ~
                          vartype=c("se","cv"),
                          conf.int= TRUE, 
                          conf.lev= 0.95)
-est_LC1_LU1_NUTS1_24_2nd <- svystatTM(des2, ~ 
+est_LC1_LU1_NUTS1_24_2nd <- svystatTM(des3, ~ 
                                     SURVEY_LC1_2+
                                     SURVEY_LU1_2+
                                     SURVEY_LC1_3+
@@ -85,7 +89,7 @@ est_LC1_LU1_NUTS1_24_2nd <- svystatTM(des2, ~
                                   conf.int= TRUE,
                                   conf.lev= 0.95)
 
-est_LC1_LU1_NUTS2_24_2nd <- svystatTM(des2, ~ 
+est_LC1_LU1_NUTS2_24_2nd <- svystatTM(des3, ~ 
                                     SURVEY_LC1_2+
                                     SURVEY_LU1_2+
                                     SURVEY_LC1_3+

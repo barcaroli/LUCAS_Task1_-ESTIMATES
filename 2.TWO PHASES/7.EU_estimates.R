@@ -4,12 +4,12 @@
 options(stringsAsFactors = TRUE)
 library(openxlsx)
 library(data.table)
-# path_output <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates/"
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/estimates2022")
-# EU_structure <- read.csv("D:/Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
-path_output <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
-setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022")
-EU_structure <- read.csv("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
+path_output <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022")
+EU_structure <- read.csv("D:/Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
+# path_output <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
+# setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022")
+# EU_structure <- read.csv("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
 EU_structure <- EU_structure[-nrow(EU_structure),]
 
 # Create a new workbook
@@ -29,8 +29,8 @@ length(EU22)
 #-------------------------------------
 # LUCAS 2009
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2009\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2009\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2009\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2009\\"
 est <- NULL
 for (k in EU22) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2009.csv"))
@@ -48,8 +48,8 @@ colnames(tot2009)[3:6] <- paste0(colnames(tot2009)[3:6],"_2009")
 #-------------------------------------
 # LUCAS 2012
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
 est <- NULL
 for (k in EU22) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2012.csv"))
@@ -67,8 +67,8 @@ colnames(tot2012)[3:6] <- paste0(colnames(tot2012)[3:6],"_2012")
 #-------------------------------------
 # LUCAS 2015
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
 
 est <- NULL
 for (k in EU22) {
@@ -86,8 +86,8 @@ colnames(tot2015)[3:6] <- paste0(colnames(tot2015)[3:6],"_2015")
 #-------------------------------------
 # LUCAS 2018
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
 est <- NULL
 for (k in EU22) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2018.csv"))
@@ -140,8 +140,8 @@ length(EU26)
 #-------------------------------------
 # LUCAS 2012
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2012\\"
 est <- NULL
 for (k in EU26) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2012.csv"))
@@ -159,8 +159,8 @@ colnames(tot2012)[3:6] <- paste0(colnames(tot2012)[3:6],"_2012")
 #-------------------------------------
 # LUCAS 2015
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
 est <- NULL
 for (k in EU26) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2015.csv"))
@@ -177,8 +177,8 @@ colnames(tot2015)[3:6] <- paste0(colnames(tot2015)[3:6],"_2015")
 #-------------------------------------
 # LUCAS 2018
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
 est <- NULL
 for (k in EU26) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2018.csv"))
@@ -230,8 +230,8 @@ length(EU27)
 #-------------------------------------
 # LUCAS 2015
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2015\\"
 est <- NULL
 for (k in EU27) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2015.csv"))
@@ -248,8 +248,8 @@ colnames(tot2015)[3:6] <- paste0(colnames(tot2015)[3:6],"_2015")
 #-------------------------------------
 # LUCAS 2018
 #-------------------------------------
-# path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
-path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+path_input <- "D:\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
+# path_input <- "C:\\Users\\UTENTE\\Google Drive\\LUCAS 2018\\task 4\\estimates_FINAL\\estimates2018\\"
 est <- NULL
 for (k in EU27) {
   country <- read.csv(paste0(path_input,k,"_est_LC1_LU1_2018.csv"))

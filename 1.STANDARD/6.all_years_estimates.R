@@ -3,6 +3,8 @@
 ######################################################################
 setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
 path_previous_estimates <- "D:/Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
+# setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
+# path_previous_estimates <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2018/task 4/estimates_FINAL/"
 # path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 
 dire <- getwd()

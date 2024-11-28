@@ -1,3 +1,9 @@
+#---------------------------------
+# Script to plot LUCAS
+# EU 27 countries LC and LU estimates
+# 2015 - 2018 -2022
+#---------------------------------
+
 plotCI <- function(df,
                    y,
                    ci_l,
@@ -28,8 +34,8 @@ plotCI <- function(df,
 
 
 library(xlsx)
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates")
-setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates")
+# setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
 # eu <- read.xlsx("Europe_estimates.xlsx",sheetIndex = 1,colClasses = rep("numeric",5))
 eu <- read.xlsx("Europe_estimates.xlsx",sheetIndex = 3)
 

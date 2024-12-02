@@ -26,7 +26,17 @@ des2 <- e.svydesign(data=s2,
                     check.data= TRUE)
 ls <- find.lon.strata(des2)
 print(ls)
-if (!is.null(ls)) des2 <- collapse.strata(des2, block.vars = ~NUTS2_24)
+  
+if (!is.null(ls)) {
+  tryCatch({
+    des2 <- collapse.strata(des2, block.vars = ~NUTS2_24)
+  },
+  error = function(e) {
+    cat("Error:", e$message, "\n")  
+    des2 <- collapse.strata(des2)  
+    return(des2)  
+  })
+}
 
 
 #-----------------------------

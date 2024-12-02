@@ -223,7 +223,7 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="AT")
+i = which(paesi=="ES")
 i
 
 for (i in c(1:length(paesi))) {

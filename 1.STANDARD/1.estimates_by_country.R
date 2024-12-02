@@ -153,7 +153,7 @@ table(c$NUTS0_16,useNA="ifany")
 
 ###########################################################################
 # Assign the new NUTS24 to the sample
-s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_21")],by="POINT_ID",all.x=TRUE)
+s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
 s2022$NUTS0_24 <- as.factor(s2022$NUTS0_24)
 s2022$NUTS1_24 <- as.factor(s2022$NUTS1_24)
 s2022$NUTS2_24 <- as.factor(s2022$NUTS2_24)

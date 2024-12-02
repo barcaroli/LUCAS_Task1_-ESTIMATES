@@ -8,6 +8,12 @@ setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
 filename <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/tables_country/tables_all.xlsx"
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/")
 # filename <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/tables_country/tables_all.xlsx"
+dire <- getwd()
+direnew1 <- paste0(dire, "\\tables_country\\")
+# if (dir.exists(direnew1)) 
+#   unlink(direnew1,recursive=TRUE)
+if (!dir.exists(direnew1)) 
+  dir.create(direnew1)
 load("countries.RData")
 wb <- createWorkbook()
 # Apply styling to the header of the Diamonds Data sheet

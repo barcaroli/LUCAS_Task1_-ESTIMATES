@@ -18,7 +18,7 @@ s2 <- s[s$SURVEY_OBS_TYPE == 1,]
 s2 <- s2[order(s2$STRATUM_LUCAS),]
 des2 <- e.svydesign(data=s2, 
                     ids= ~ POINT_ID, 
-                    strata= ~ STRATUM_LUCAS, 
+                    strata= ~ STRATUM_LUCAS,
                     # weights = ~ WGT_LUCAS,
                     weights = ~ cal_wgt,
                     self.rep.str= NULL, 

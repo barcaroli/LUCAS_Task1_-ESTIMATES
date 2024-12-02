@@ -1,6 +1,8 @@
 #-----------------------------------------------------------
 # Script to compare estimate trends at EU level (22, 26, 26) 
 #-----------------------------------------------------------
+require(xlsx)
+detach(package:xlsx)
 options(stringsAsFactors = TRUE)
 library(openxlsx)
 library(data.table)

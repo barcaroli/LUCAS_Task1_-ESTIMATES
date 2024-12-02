@@ -223,7 +223,7 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="CY")
+i = which(paesi=="AT")
 i
 
 for (i in c(1:length(paesi))) {
@@ -260,7 +260,7 @@ for (i in c(1:length(paesi))) {
     ###############   
     # CALIBRATION
     ###############
-    s <- s[order(s$STRATUM_LUCAS),]
+    s <- s[order(s$NUTS2_24,s$STRATUM_LUCAS),]
     if (length(levels(s$NUTS2_24)) > 1) {
         # design
         des <- e.svydesign(data=s, 
@@ -271,8 +271,9 @@ for (i in c(1:length(paesi))) {
                            fpc= ~fpc, 
                            check.data= TRUE)
         ls <- find.lon.strata(des)
+        print(ls)
         # if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
-        if (!is.null(ls)) des <- collapse.strata(des)
+        if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24 )
         
         levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
         levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
@@ -325,7 +326,7 @@ for (i in c(1:length(paesi))) {
                          fpc= ~fpc, 
                          check.data= TRUE)
       ls <- find.lon.strata(des)
-      if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
+      if (!is.null(ls)) des <- collapse.strata(des)
       
       levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
       levels(des$variables$GRA18_10)<-levels(m$GRA18_10)

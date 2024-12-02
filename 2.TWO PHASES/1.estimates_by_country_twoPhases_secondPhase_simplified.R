@@ -15,7 +15,7 @@
 # Select only Field
 s2 <- s[s$SURVEY_OBS_TYPE == 1,]
 # design
-s2 <- s2[order(s2$STRATUM_LUCAS),]
+s2 <- s2[order(s2$NUTS2_24,s2$STRATUM_LUCAS),]
 des2 <- e.svydesign(data=s2, 
                     ids= ~ POINT_ID, 
                     strata= ~ STRATUM_LUCAS,
@@ -26,7 +26,7 @@ des2 <- e.svydesign(data=s2,
                     check.data= TRUE)
 ls <- find.lon.strata(des2)
 print(ls)
-if (!is.null(ls)) des2 <- collapse.strata(des2)
+if (!is.null(ls)) des2 <- collapse.strata(des2, block.vars = ~NUTS2_24)
 
 
 #-----------------------------

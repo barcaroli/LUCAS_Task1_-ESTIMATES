@@ -80,10 +80,10 @@ ls <- find.lon.strata(des3)
 if (!is.null(ls)) des3 <- collapse.strata(des3)
 
 est_LC1_LU1_2nd <- svystatTM(des3, ~ 
-                               SURVEY_LC1_2+
-                               SURVEY_LU1_2+
-                               SURVEY_LC1_3+
-                               SURVEY_LU1_3                         ,
+                             SURVEY_LC1_2+
+                             SURVEY_LU1_2+
+                             SURVEY_LC1_3+
+                             SURVEY_LU1_3,
                              estimator="Total",
                              vartype=c("se","cv"),
                              conf.int= TRUE, 
@@ -115,12 +115,12 @@ est_LC1_LU1_NUTS2_24_2nd <- svystatTM(des3, ~
 if (length(levels(s$NUTS1_24)) > 1){
   est_LC1_LU1_NUTS1_24_2nd_t <- as.data.frame(t(est_LC1_LU1_NUTS1_24_2nd))[-1,]
   est_LC1_LU1_NUTS1_24_2nd_t$variable <- row.names(est_LC1_LU1_NUTS1_24_2nd_t)
-  est_LC1_LU1_NUTS1_24_2nd_t$variable[1] <- "variable"
+  #est_LC1_LU1_NUTS1_24_2nd_t$variable[1] <- "variable"
 }
 #-----------------------------------------------------------
 if (length(levels(s$NUTS2_24)) > 1){
   est_LC1_LU1_NUTS2_24_2nd_t <- as.data.frame(t(est_LC1_LU1_NUTS2_24_2nd))[-1,]
   est_LC1_LU1_NUTS2_24_2nd_t$variable <- row.names(est_LC1_LU1_NUTS2_24_2nd_t)
-  est_LC1_LU1_NUTS2_24_2nd_t$variable[1] <- "variable"
+  #est_LC1_LU1_NUTS2_24_2nd_t$variable[1] <- "variable"
 }
 

@@ -65,7 +65,7 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   #-------------------
   # twophasehase estimates
   #-------------------
-  setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022_aggiornati")
+  setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022")
   # leggo i dati delle stime europee nelle due procedure:
   c2 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS1_24_2022_t.csv"))
   c2 = c2 %>% filter(variable !="variable")

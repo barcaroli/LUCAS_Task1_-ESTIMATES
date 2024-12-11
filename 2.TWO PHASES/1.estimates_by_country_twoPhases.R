@@ -473,7 +473,7 @@ for (i in c(1:length(paesi))) {
     est_LC1_LU1_NUTS1_24_t <- as.data.frame(t(est_LC1_LU1_NUTS1_24))
     est_LC1_LU1_NUTS1_24_t <- est_LC1_LU1_NUTS1_24_t[-1,]
     est_LC1_LU1_NUTS1_24_t$variable <- row.names(est_LC1_LU1_NUTS1_24_t)
-    est_LC1_LU1_NUTS1_24_t$variable[1] <- "variable"
+    #est_LC1_LU1_NUTS1_24_t$variable[1] <- "variable"
   }
   
   est_LC1_LU1_NUTS2_24 <- svystatTM(cal, ~ area +
@@ -496,7 +496,7 @@ for (i in c(1:length(paesi))) {
     est_LC1_LU1_NUTS2_24_t <- as.data.frame(t(est_LC1_LU1_NUTS2_24))
     est_LC1_LU1_NUTS2_24_t <- est_LC1_LU1_NUTS2_24_t[-1,]
     est_LC1_LU1_NUTS2_24_t$variable <- row.names(est_LC1_LU1_NUTS2_24_t)
-    est_LC1_LU1_NUTS2_24_t$variable[1] <- "variable"
+    #est_LC1_LU1_NUTS2_24_t$variable[1] <- "variable"
   }
   
   #---------------------------------------------------------------

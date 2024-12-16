@@ -103,9 +103,10 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   colnames(c2_2)[3:7] <- paste0("twophase_",colnames(c2_2)[3:7])
   
   est_2 <- merge(c1_2,c2_2,by=c("NUTS1", "Variable"),all.x=TRUE)
+  est_2$area_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate),3)
   est_2$area_rel_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate) / est_2$standard_Estimate,3)
   est_2$cv_diff <- round((est_2$twophase_CV - est_2$standard_CV),3)
-  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_rel_diff","standard_CV","twophase_CV","cv_diff")]
+  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate", "area_diff", "area_rel_diff","standard_CV","twophase_CV","cv_diff")]
  
   est_2 <- est_2 %>% rename(standard_Area_2022=standard_Estimate, twophase_Area_2022=twophase_Estimate, standard_CV_2022=standard_CV, twophase_CV_2022 = twophase_CV) 
   
@@ -115,10 +116,11 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   
   # Create a formattable table with in-cell color scales and bars
   t <- formattable(
-    est_2[,c("NUTS1", "Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+    est_2[,c("NUTS1", "Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
     list(
       standard_Area_2022 = color_bar("lightgreen"),
       twophase_Area_2022 = color_bar("orange"),
+      area_diff = color_tile("lightblue","pink"),
       area_rel_diff = color_tile("lightblue","pink"),
       cv_diff = color_tile("lightblue","pink")
       # ,
@@ -142,19 +144,21 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   colnames(c2_2)[3:7] <- paste0("twophase_",colnames(c2_2)[3:7])
   
   est_2 <- merge(c1_2,c2_2,by=c("NUTS1", "Variable"),all.x=TRUE)
+  est_2$area_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate),3)
   est_2$area_rel_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate) / est_2$standard_Estimate,3)
   est_2$cv_diff <- round((est_2$twophase_CV - est_2$standard_CV),3)
-  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_rel_diff","standard_CV","twophase_CV","cv_diff")]
+  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_diff","area_rel_diff","standard_CV","twophase_CV","cv_diff")]
   
   est_2 <- est_2 %>% rename(standard_Area_2022=standard_Estimate, twophase_Area_2022=twophase_Estimate, standard_CV_2022=standard_CV, twophase_CV_2022 = twophase_CV) 
   
   
   # Create a formattable table with in-cell color scales and bars
   t <- formattable(
-    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
     list(
       standard_Area_2022 = color_bar("lightgreen"),
       twophase_Area_2022 = color_bar("orange"),
+      area_diff = color_tile("lightblue","pink"),
       area_rel_diff = color_tile("lightblue","pink"),
       cv_diff = color_tile("lightblue","pink")
       # ,
@@ -179,9 +183,10 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   colnames(c2_2)[3:7] <- paste0("twophase_",colnames(c2_2)[3:7])
   
   est_2 <- merge(c1_2,c2_2,by=c("NUTS1", "Variable"),all.x=TRUE)
+  est_2$area_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate),3)
   est_2$area_rel_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate) / est_2$standard_Estimate,3)
   est_2$cv_diff <- round((est_2$twophase_CV - est_2$standard_CV),3)
-  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_rel_diff","standard_CV","twophase_CV","cv_diff")]
+  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_diff", "area_rel_diff","standard_CV","twophase_CV","cv_diff")]
   
   est_2 <- est_2 %>% rename(standard_Area_2022=standard_Estimate, twophase_Area_2022=twophase_Estimate, standard_CV_2022=standard_CV, twophase_CV_2022 = twophase_CV) 
   
@@ -190,10 +195,11 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   
   # Create a formattable table with in-cell color scales and bars
   t <- formattable(
-    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
     list(
       standard_Area_2022 = color_bar("lightgreen"),
       twophase_Area_2022 = color_bar("orange"),
+      area_diff = color_tile("lightblue","pink"),
       area_rel_diff = color_tile("lightblue","pink"),
       cv_diff = color_tile("lightblue","pink")
       # ,
@@ -217,9 +223,10 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   colnames(c2_2)[3:7] <- paste0("twophase_",colnames(c2_2)[3:7])
   
   est_2 <- merge(c1_2,c2_2,by=c("NUTS1", "Variable"),all.x=TRUE)
+  est_2$area_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate),3)
   est_2$area_rel_diff <- round((est_2$twophase_Estimate - est_2$standard_Estimate) / est_2$standard_Estimate,3)
   est_2$cv_diff <- round((est_2$twophase_CV - est_2$standard_CV),3)
-  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_rel_diff","standard_CV","twophase_CV","cv_diff")]
+  est_2 <- est_2[,c("NUTS1","Variable","standard_Estimate","twophase_Estimate","area_diff", "area_rel_diff","standard_CV","twophase_CV","cv_diff")]
   
   est_2 <- est_2 %>% rename(standard_Area_2022=standard_Estimate, twophase_Area_2022=twophase_Estimate, standard_CV_2022=standard_CV, twophase_CV_2022 = twophase_CV) 
   
@@ -228,10 +235,11 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   
   # Create a formattable table with in-cell color scales and bars
   t <- formattable(
-    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+    est_2[,c("NUTS1","Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
     list(
       standard_Area_2022 = color_bar("lightgreen"),
       twophase_Area_2022 = color_bar("orange"),
+      area_diff = color_tile("lightblue","pink"),
       area_rel_diff = color_tile("lightblue","pink"),
       cv_diff = color_tile("lightblue","pink")
       # ,

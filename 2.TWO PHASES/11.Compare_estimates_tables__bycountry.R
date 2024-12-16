@@ -80,9 +80,10 @@ colnames(c1_2)[c(2:6)] <- paste0("standard_",colnames(c1_2)[c(2:6)])
 colnames(c2_2)[c(2:6)] <- paste0("twophase_",colnames(c2_2)[c(2:6)])
 
 est_2 <- merge(c1_2,c2_2,by="Variable",all.x=TRUE)
+est_2$area_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022),3)
 est_2$area_rel_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022) / est_2$standard_Area_2022,3)
 est_2$cv_diff <- round((est_2$twophase_CV_2022 - est_2$standard_CV_2022),3)
-est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
+est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
 # est_2[,c("standard_Area2022","twophase_Area2022")] <- round(est_2[,c("standard_Area2022","twophase_Area2022")] )
 # est_2[,c("standard_CV_2022","twophase_CV_2022")] <- round(est_2[,c("standard_CV_2022","twophase_CV_2022")],3 )
 # est_2[est_2$Variable=="LC1_2A1",c("standard_Area2022","twophase_Area2022","standard_CV_2022","twophase_CV_2022")]
@@ -91,10 +92,11 @@ est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel
 
 # Create a formattable table with in-cell color scales and bars
 t <- formattable(
-  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
   list(
     standard_Area_2022 = color_bar("lightgreen"),
     twophase_Area_2022 = color_bar("orange"),
+    area_diff = color_tile("lightblue","pink"),
     area_rel_diff = color_tile("lightblue","pink"),
     cv_diff = color_tile("lightblue","pink")
     # ,
@@ -119,9 +121,10 @@ colnames(c1_2)[c(2:6)] <- paste0("standard_",colnames(c1_2)[c(2:6)])
 colnames(c2_2)[c(2:6)] <- paste0("twophase_",colnames(c2_2)[c(2:6)])
 
 est_2 <- merge(c1_2,c2_2,by="Variable")
+est_2$area_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022),3)
 est_2$area_rel_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022) / est_2$standard_Area_2022,3)
 est_2$cv_diff <- round((est_2$twophase_CV_2022 - est_2$standard_CV_2022) ,3)
-est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
+est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
 # est_2[,c("standard_Area_2022","twophase_Area_2022")] <- round(est_2[,c("standard_Area_2022","twophase_Area_2022")] )
 # est_2[,c("standard_CV_2022","twophase_CV_2022")] <- round(est_2[,c("standard_CV_2022","twophase_CV_2022")],3 )
 # est_2[est_2$Variable=="LC1_2A1",c("standard_Area_2022","twophase_Area_2022","standard_CV_2022","twophase_CV_2022")]
@@ -129,10 +132,11 @@ est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel
 
 # Create a formattable table with in-cell color scales and bars
 t <- formattable(
-  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
   list(
     standard_Area_2022 = color_bar("lightgreen"),
     twophase_Area_2022 = color_bar("orange"),
+    area_diff = color_tile("lightblue","pink"),
     area_rel_diff = color_tile("lightblue","pink"),
     cv_diff = color_tile("lightblue","pink")
     # ,
@@ -157,9 +161,10 @@ colnames(c1_2)[c(2:6)] <- paste0("standard_",colnames(c1_2)[c(2:6)])
 colnames(c2_2)[c(2:6)] <- paste0("twophase_",colnames(c2_2)[c(2:6)])
 
 est_2 <- merge(c1_2,c2_2,by="Variable")
+est_2$area_diff <-round((est_2$twophase_Area_2022 - est_2$standard_Area_2022),3)
 est_2$area_rel_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022) / est_2$standard_Area_2022,3)
 est_2$cv_diff <- round((est_2$twophase_CV_2022 - est_2$standard_CV_2022),3)
-est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
+est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
 # est_2[,c("standard_Area_2022","twophase_Area_2022")] <- round(est_2[,c("standard_Area_2022","twophase_Area_2022")] )
 # est_2[,c("standard_CV_2022","twophase_CV_2022")] <- round(est_2[,c("standard_CV_2022","twophase_CV_2022")],3 )
 # est_2[est_2$Variable=="LC1_2A1",c("standard_Area_2022","twophase_Area_2022","standard_CV_2022","twophase_CV_2022")]
@@ -168,10 +173,11 @@ est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel
 
 # Create a formattable table with in-cell color scales and bars
 t <- formattable(
-  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
   list(
     standard_Area_2022 = color_bar("lightgreen"),
     twophase_Area_2022 = color_bar("orange"),
+    area_diff = color_tile("lightblue","pink"),
     area_rel_diff = color_tile("lightblue","pink"),
     cv_diff = color_tile("lightblue","pink")
     # ,
@@ -196,9 +202,10 @@ colnames(c1_2)[c(2:6)] <- paste0("standard_",colnames(c1_2)[c(2:6)])
 colnames(c2_2)[c(2:6)] <- paste0("twophase_",colnames(c2_2)[c(2:6)])
 
 est_2 <- merge(c1_2,c2_2,by="Variable")
+est_2$area_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022),3)
 est_2$area_rel_diff <- round((est_2$twophase_Area_2022 - est_2$standard_Area_2022) / est_2$standard_Area_2022,3)
 est_2$cv_diff <- round((est_2$twophase_CV_2022 - est_2$standard_CV_2022) / est_2$standard_CV_2022,3)
-est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
+est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")]
 # est_2[,c("standard_Area_2022","twophase_Area_2022")] <- round(est_2[,c("standard_Area_2022","twophase_Area_2022")] )
 # est_2[,c("standard_CV_2022","twophase_CV_2022")] <- round(est_2[,c("standard_CV_2022","twophase_CV_2022")],3 )
 # est_2[est_2$Variable=="LC1_2A1",c("standard_Area_2022","twophase_Area_2022","standard_CV_2022","twophase_CV_2022")]
@@ -207,10 +214,11 @@ est_2 <- est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel
 
 # Create a formattable table with in-cell color scales and bars
 t <- formattable(
-  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
+  est_2[,c("Variable","standard_Area_2022","twophase_Area_2022","area_diff", "area_rel_diff","standard_CV_2022","twophase_CV_2022","cv_diff")],
   list(
     standard_Area_2022 = color_bar("lightgreen"),
     twophase_Area_2022 = color_bar("orange"),
+    area_diff = color_tile("lightblue","pink"),
     area_rel_diff = color_tile("lightblue","pink"),
     cv_diff = color_tile("lightblue","pink")
     # ,

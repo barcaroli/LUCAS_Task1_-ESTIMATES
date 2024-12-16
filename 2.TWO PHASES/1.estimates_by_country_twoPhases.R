@@ -32,10 +32,19 @@ direnew2 <- paste(dire, "/weights2022", sep = "")
 if (!dir.exists(direnew2))
   dir.create(direnew2)
 
+direnew3 <- paste(dire, "/Samples", sep = "")
+# if (dir.exists(direnew1))
+#   unlink(direnew1,recursive=TRUE)
+if (!dir.exists(direnew3))
+  dir.create(direnew3)
+# 
 #------------------------------------------
 # Read survey 2022
 #------------------------------------------
-s2022 <- fread(paste0(path_data,"survey_2022.txt"))
+#s2022old <- fread(paste0(path_data,"survey_2022.txt"))
+s2022 <- read.csv(paste0(path_data,"LUCAS22_corrected_complete.csv"))
+#remove rows with NA in LC, LU
+s2022=s2022[!(is.na(s2022$SURVEY_LC1) | is.na(s2022$SURVEY_LU1)), ]
 # Fill the missing digits
 s2022$SURVEY_LC1 <- as.character(s2022$SURVEY_LC1)
 table(s2022$SURVEY_LC1)
@@ -157,19 +166,19 @@ table(c$NUTS0_16,useNA="ifany")
 
 ###########################################################################
 # Assign the new NUTS24 to the sample
-s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
+# s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
 s2022$NUTS0_24 <- as.factor(s2022$NUTS0_24)
 s2022$NUTS1_24 <- as.factor(s2022$NUTS1_24)
 s2022$NUTS2_24 <- as.factor(s2022$NUTS2_24)
 s2022$NUTS3_24 <- as.factor(s2022$NUTS3_24)
 a <- s2022[is.na(s2022$NUTS2_24),]
-b <- master[is.na(master$NUTS2_24),]
+#b <- master[is.na(master$NUTS2_24),]
 
 ###########################################################################
 # Read population
-pop <- read.csv(paste0(path_data,"EU_population_2009_2023.csv"))
-colnames(pop) <- c("NUTS","Pop2009","Pop2012","Pop2015","Pop2018","Pop2023")
-s2022 <- merge(s2022,pop[,c("NUTS","Pop2023")],by.x="NUTS0_24",by.y="NUTS")
+# pop <- read.csv(paste0(path_data,"EU_population_2009_2023.csv"))
+# colnames(pop) <- c("NUTS","Pop2009","Pop2012","Pop2015","Pop2018","Pop2023")
+# s2022 <- merge(s2022,pop[,c("NUTS","Pop2023")],by.x="NUTS0_24",by.y="NUTS")
 
 
 ###########################################################
@@ -278,8 +287,18 @@ for (i in c(1:length(paesi))) {
                        fpc= ~fpc, 
                        check.data= TRUE)
     ls <- find.lon.strata(des)
-    # if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
-    if (!is.null(ls)) des <- collapse.strata(des)
+    #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
+    #if (!is.null(ls)) des <- collapse.strata(des)
+    if (!is.null(ls)) {
+      des <-tryCatch({
+        des <- collapse.strata(des, block.vars = ~NUTS2_24)
+      },
+      error = function(e) {
+        cat("Error:", e$message, "\n")
+        des <- collapse.strata(des)
+        return(des)
+      })
+    }
     
     levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
     levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
@@ -301,10 +320,10 @@ for (i in c(1:length(paesi))) {
     popfill <- fill.template(universe=m, template= poptemp)
     ######################################################
     # and adjust with areas:
-    area_totals <- areas$area2024[substr(areas$NUTS2,1,2)==country]
-    area_totals <- area_totals[!is.na(area_totals)]
-    popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"] <- area_totals
-    sum(popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"])
+    #area_totals <- areas$area2024[substr(areas$NUTS2,1,2)==country]
+    #area_totals <- area_totals[!is.na(area_totals)]
+    #popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"] <- area_totals
+    #sum(popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"])
     ######################################################
     # calibration
     cal <- e.calibrate(design=des,
@@ -333,7 +352,17 @@ for (i in c(1:length(paesi))) {
                        check.data= TRUE)
     ls <- find.lon.strata(des)
     #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
-    if (!is.null(ls)) des <- collapse.strata(des)
+    #if (!is.null(ls)) des <- collapse.strata(des)
+    if (!is.null(ls)) {
+      des <- tryCatch({
+        des <- collapse.strata(des, block.vars = ~NUTS2_24)
+      },
+      error = function(e) {
+        cat("Error:", e$message, "\n")
+        des <- collapse.strata(des)
+        return(des)
+      })
+    }
     levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
     levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
     levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
@@ -351,7 +380,7 @@ for (i in c(1:length(paesi))) {
       
       
       popfill <- fill.template(universe=m, template= poptemp)
-      popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+      #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
       
       
       # calibration
@@ -395,7 +424,7 @@ for (i in c(1:length(paesi))) {
                                     FTY18_10) - 1,)
       # fill with the master
       popfill <- fill.template(universe=m, template= poptemp)
-      popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+      #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
       # calibration
       cal <- e.calibrate(design=des, 
                          df.population= popfill, 

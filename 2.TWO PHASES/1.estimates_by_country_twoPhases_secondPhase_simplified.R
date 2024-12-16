@@ -14,6 +14,43 @@
 # load("firstPhase.RData")
 # Select only Field
 s2 <- s[s$SURVEY_OBS_TYPE == 1,]
+cat("\nN.obs before selection:",nrow(s2))
+# Select only obs without 'x' in LC1 and LU1
+s2 <- droplevels(s2)
+table(s2$SURVEY_LC1)
+table(s2$SURVEY_LU1)
+if(length(grep("x",s2$SURVEY_LC1))>0){
+  s2 <- s2[-grep("x",s2$SURVEY_LC1),]
+}
+if(length(grep("x",s2$SURVEY_LU1))>0){
+  s2 <- s2[-grep("x",s2$SURVEY_LU1),]
+}
+if(length(grep("X",s2$SURVEY_LC1))>0){
+  s2 <-  s2[-grep("X",s2$SURVEY_LC1),]
+}
+if(length(grep("X",s2$SURVEY_LU1))>0){
+  s2 <-  s2[-grep("X",s2$SURVEY_LU1),]
+}
+
+# Select only obs without given LC1 and LU1 values
+s2 <- s2[!s2$SURVEY_LC1 %in% c("A00","A10","A20",
+                               "B00","B10","B20","B30","B40","B50","B60","B70","B80",
+                               "C00","C20",
+                               "D00",
+                               "E00",
+                               "F00",
+                               "G00","G10","G20",
+                               "H00","H10","H20","H30"),]
+s2 <- s2[!s2$SURVEY_LU1 %in% c("8","U100","U110",
+                               "U200","U220",
+                               "U300","U310","U320","U360",
+                               "U400"),]
+cat("\nN.obs after selection:",nrow(s2))
+s2 <- droplevels(s2)
+table(s2$SURVEY_LC1)
+table(s2$SURVEY_LU1)
+save(s, file=paste0("Samples/", country, "_s_1stphase.RData"))
+save(s2, file=paste0("Samples/", country, "_s_2ndphase.RData"))
 # design
 s2 <- s2[order(s2$STRATUM_LUCAS),]
 des2 <- e.svydesign(data=s2, 
@@ -27,7 +64,7 @@ des2 <- e.svydesign(data=s2,
 ls <- find.lon.strata(des2)
 print(ls)
 if (!is.null(ls)) {
-  tryCatch({
+  des2 <-tryCatch({
     des2 <- collapse.strata(des2, block.vars = ~NUTS2_24)
   },
   error = function(e) {
@@ -56,11 +93,11 @@ cal2 <- e.calibrate(design=des2,
                       SURVEY_LU1_1 - 1,
                     calfun= 'linear', bounds =   c(0.05,Inf))
 check.cal(cal2)
-print(a)
+#print(a)
 #UWE(cal2)
-summary(s$WGT_LUCAS)
-sum(s$WGT_LUCAS)
-sum(m$ones)
+# summary(s$WGT_LUCAS)
+# sum(s$WGT_LUCAS)
+# sum(m$ones)
 sum(m$point_area)
 # cal2$prob <- cal2$prob/cal2$variables$point_area
 sum(weights(cal2))
@@ -77,7 +114,17 @@ des3 <- e.svydesign(data=s2,
                     fpc= ~fpc, 
                     check.data= TRUE)
 ls <- find.lon.strata(des3)
-if (!is.null(ls)) des3 <- collapse.strata(des3)
+#if (!is.null(ls)) des3 <- collapse.strata(des3)
+if (!is.null(ls)) {
+  des3 <-tryCatch({
+    des3 <- collapse.strata(des3, block.vars = ~NUTS2_24)
+  },
+  error = function(e) {
+    cat("Error:", e$message, "\n")  
+    des3 <- collapse.strata(des3)  
+    return(des3)  
+  })
+}
 
 est_LC1_LU1_2nd <- svystatTM(des3, ~ 
                              SURVEY_LC1_2+
@@ -88,6 +135,9 @@ est_LC1_LU1_2nd <- svystatTM(des3, ~
                              vartype=c("se","cv"),
                              conf.int= TRUE, 
                              conf.lev= 0.95)
+
+
+# by nuts1
 est_LC1_LU1_NUTS1_24_2nd <- svystatTM(des3, ~ 
                                         SURVEY_LC1_2+
                                         SURVEY_LU1_2+

@@ -10,11 +10,11 @@ library(dplyr)
 library(tidyr)
 
 # read countries:
-load("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
 
 #create folder where results must be saved: 
 #setwd:
-setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES/")
+setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
 dire <- getwd()
 direnew1 <- paste(dire, "\\Estimates_comparison\\", sep = "")
 # if (dir.exists(direnew1)) 
@@ -35,7 +35,7 @@ for(i in 1:length(countries)){
   #-------------------
   # Standard estimates
   #-------------------
-  setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/1.STANDARD/estimates2022")
+  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/estimates2022")
   
   # leggo i dati delle stime europee nelle due procedure:
   c1 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS2_24_2022_t.csv"))
@@ -65,7 +65,7 @@ for(i in 1:length(countries)){
   #-------------------
   # twophasehase estimates
   #-------------------
-  setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022")
+  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022")
   # leggo i dati delle stime europee nelle due procedure:
   c2 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS2_24_2022_t.csv"))
   c2 = c2 %>% filter(variable !="variable")

@@ -12,7 +12,7 @@ path_previous_estimates="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/previ
 path_data <- "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/"
 
 dire <- getwd()
-direnew1 <- paste(dire, "\\allyears_estimates\\", sep = "")
+direnew1 <- paste(dire, "\\allyears_estimates_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1)) 
@@ -31,7 +31,7 @@ for (i in c(1:27)) {
   filename2 <- paste(path_previous_estimates,"estimates2012/",country,"_est_LC1_LU1_2012.csv",sep="")
   filename3 <- paste(path_previous_estimates,"estimates2015/",country,"_est_LC1_LU1_2015.csv",sep="")
   filename4 <- paste(path_previous_estimates,"estimates2018/",country,"_est_LC1_LU1_2018.csv",sep="")
-  filename5 <- paste("estimates2022/",country,"_est_LC1_LU1_2022.csv",sep="")
+  filename5 <- paste("estimates2022_NoField/",country,"_est_LC1_LU1_2022.csv",sep="")
   
   a <- dir(path = paste0(path_previous_estimates,"\\estimates2009\\"),pattern = country)
   if (length(a) > 0) {

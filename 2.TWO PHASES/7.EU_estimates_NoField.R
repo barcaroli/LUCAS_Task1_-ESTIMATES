@@ -12,13 +12,13 @@ library(data.table)
 # EU_structure <- read.csv("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
 
 setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
-path_output = "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates/"
+path_output = "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates_NoField/"
 EU_structure <- read.csv("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/Eu_structure.csv")
 path_previous_estimates="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/previous_estimates/"
 EU_structure <- EU_structure[-nrow(EU_structure),]
 
 dire <- getwd()
-direnew1 <- paste(dire, "\\EU_estimates\\", sep = "")
+direnew1 <- paste(dire, "\\EU_estimates_NoField\\", sep = "")
 # if (dir.exists(direnew1))
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1))
@@ -119,7 +119,7 @@ colnames(tot2018)[3:6] <- paste0(colnames(tot2018)[3:6],"_2018")
 #-------------------------------------
 est <- NULL
 for (k in EU22) {
-  country <- read.csv(paste0(getwd(),"\\estimates2022\\",k,"_est_LC1_LU1_2022.csv"))
+  country <- read.csv(paste0(getwd(),"\\estimates2022_NoField\\",k,"_est_LC1_LU1_2022.csv"))
   country <- country[,c(1:3)]
   est <- rbind(est,country)
 }
@@ -211,7 +211,7 @@ colnames(tot2018)[3:6] <- paste0(colnames(tot2018)[3:6],"_2018")
 #-------------------------------------
 est <- NULL
 for (k in EU26) {
-  country <- read.csv(paste0(getwd(),"\\estimates2022\\",k,"_est_LC1_LU1_2022.csv"))
+  country <- read.csv(paste0(getwd(),"\\estimates2022_NoField\\",k,"_est_LC1_LU1_2022.csv"))
   country <- country[,c(1:3)]
   est <- rbind(est,country)
 }
@@ -282,7 +282,7 @@ colnames(tot2018)[3:6] <- paste0(colnames(tot2018)[3:6],"_2018")
 #-------------------------------------
 est <- NULL
 for (k in EU27) {
-  country <- read.csv(paste0(getwd(),"\\estimates2022\\",k,"_est_LC1_LU1_2022.csv"))
+  country <- read.csv(paste0(getwd(),"\\estimates2022_NoField\\",k,"_est_LC1_LU1_2022.csv"))
   country <- country[,c(1:3)]
   est <- rbind(est,country)
 }

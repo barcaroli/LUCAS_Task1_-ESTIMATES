@@ -13,13 +13,13 @@
 # library(ReGenesees)
 # load("firstPhase.RData")
 
-dir_estimate_toadd="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022proTwoPhasesField/estimates2022proTwoPhasesField/"
+dir_estimate_toadd="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022proTwoPhasesNoField/estimates2022proTwoPhasesNoField/"
 
 # flag data to identify observations in the second sample 
 # Select only Field
-s2 <- s[s$SURVEY_OBS_TYPE == 1,]
+#s2 <- s[s$SURVEY_OBS_TYPE == 1,]
 # if no filter on obs_type:
-#s2 <- s
+s2 <- s
 cat("\nN.obs before selection:",nrow(s2))
 # Select only obs without 'x' in LC1 and LU1
 s2 <- droplevels(s2)

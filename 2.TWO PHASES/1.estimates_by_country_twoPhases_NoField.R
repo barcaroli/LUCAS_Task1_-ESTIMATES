@@ -21,19 +21,19 @@ path_data="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/"
 
 # Prepare the path for the output
 dire <- getwd()
-direnew1 <- paste(dire, "/estimates2022", sep = "")
+direnew1 <- paste(dire, "/estimates2022_NoField", sep = "")
 # if (dir.exists(direnew1))
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1))
   dir.create(direnew1)
 # 
-direnew2 <- paste(dire, "/weights2022", sep = "")
+direnew2 <- paste(dire, "/weights2022_NoField", sep = "")
 # if (dir.exists(direnew2))
 #   unlink(direnew2,recursive=TRUE)
 if (!dir.exists(direnew2))
   dir.create(direnew2)
 
-direnew3 <- paste(dire, "/Samples", sep = "")
+direnew3 <- paste(dire, "/Samples_NoField", sep = "")
 # if (dir.exists(direnew1))
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew3))
@@ -530,7 +530,7 @@ for (i in c(1:length(paesi))) {
   #---------------------------------------------------------------
   # 2nd PHASE
   #---------------------------------------------------------------
-  source("Script/1.estimates_by_country_twoPhases_secondPhase_simplified.R")
+  source("Script/1.estimates_by_country_twoPhases_secondPhase_simplified_noField.R")
   
   #---------------------------------------------------------------
   # Join outputs and write them

@@ -14,7 +14,7 @@ load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countrie
 #setwd:
 setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
 dire <- getwd()
-direnew1 <- paste(dire, "\\Estimates_comparison\\", sep = "")
+direnew1 <- paste(dire, "\\Estimates_comparison_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1)) 
@@ -54,7 +54,7 @@ c1$CV_2022 <- round(c1$CV_2022,3)
 #-------------------
 # twophasehase estimates
 #-------------------
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates")
+setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates_NoField")
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
 
 c2 <- read.csv(paste0(countries[i],"_est_all.csv"))
@@ -233,8 +233,8 @@ addStyle(wb, sheet = "LU 3 digits", bodyStyle, rows = 2:(nrow(t)+1), cols = 1, g
 writeData(wb, sheet = "LU 3 digits", x = t, colNames = TRUE, rowNames = FALSE)
 # Write all
 #setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/")
-saveWorkbook(wb, paste0(countries[i],"_Estimates_comparison.xlsx"), overwrite = TRUE)
+#setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison_NoField/")
+saveWorkbook(wb, paste0(direnew1, countries[i],"_Estimates_comparison.xlsx"), overwrite = TRUE)
 
 }
 

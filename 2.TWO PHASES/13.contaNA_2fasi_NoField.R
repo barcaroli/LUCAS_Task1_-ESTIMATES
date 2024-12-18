@@ -7,7 +7,7 @@ setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
 # read countries:
 load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
 
-dire_comparison="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/"
+dire_comparison="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison_NoField/"
 
 wb=createWorkbook()
 # comparison European level-------
@@ -714,4 +714,4 @@ writeData(wb, sheet = "NUTS2", x = E, colNames = TRUE, rowNames = FALSE)
 # Write all
 #setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
 #setwd(direnew1 )
-saveWorkbook(wb, "Output/NA_count_2phases.xlsx", overwrite = TRUE)
+saveWorkbook(wb, "Output/NA_count_2phases_NoField.xlsx", overwrite = TRUE)

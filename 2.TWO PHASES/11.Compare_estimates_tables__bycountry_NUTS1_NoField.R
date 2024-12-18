@@ -16,7 +16,7 @@ load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countrie
 #setwd:
 setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
 dire <- getwd()
-direnew1 <- paste(dire, "\\Estimates_comparison\\", sep = "")
+direnew1 <- paste(dire, "\\Estimates_comparison_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
 #   unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1)) 
@@ -65,7 +65,7 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   #-------------------
   # twophasehase estimates
   #-------------------
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022")
+  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022_NoField")
   # leggo i dati delle stime europee nelle due procedure:
   c2 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS1_24_2022_t.csv"))
   c2 = c2 %>% filter(variable !="variable")
@@ -254,8 +254,8 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   writeData(wb, sheet = "LU 3 digits", x = t, colNames = TRUE, rowNames = FALSE)
   # Write all
   #setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
-  setwd(direnew1 )
-  saveWorkbook(wb, paste0(countries[i],"_NUTS1_Estimates_comparison.xlsx"), overwrite = TRUE)
+  #setwd(direnew1 )
+  saveWorkbook(wb, paste0(direnew1, countries[i],"_NUTS1_Estimates_comparison.xlsx"), overwrite = TRUE)
   
 }
 

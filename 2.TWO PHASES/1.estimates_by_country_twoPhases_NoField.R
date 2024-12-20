@@ -10,40 +10,40 @@ library(openxlsx)
 library(dplyr)
 library(tidyr)
 
-#setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
 # setwd("C:\\Users\\UTENTE\\Google Drive\\LUCAS 2025\\Task 1 - ESTIMATES\\2.TWO PHASES")
-#path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
+path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 # path_data <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/"
 #setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES")
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
-path_data="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/"
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
+# path_data="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/"
 
 
 # Prepare the path for the output
 dire <- getwd()
 direnew1 <- paste(dire, "/estimates2022_NoField", sep = "")
-# if (dir.exists(direnew1))
-#   unlink(direnew1,recursive=TRUE)
+if (dir.exists(direnew1))
+  unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1))
   dir.create(direnew1)
 # 
-direnew2 <- paste(dire, "/weights2022_NoField", sep = "")
-# if (dir.exists(direnew2))
-#   unlink(direnew2,recursive=TRUE)
-if (!dir.exists(direnew2))
-  dir.create(direnew2)
-
-direnew3 <- paste(dire, "/Samples_NoField", sep = "")
-# if (dir.exists(direnew1))
-#   unlink(direnew1,recursive=TRUE)
-if (!dir.exists(direnew3))
-  dir.create(direnew3)
+# direnew2 <- paste(dire, "/weights2022", sep = "")
+# # if (dir.exists(direnew2))
+# #   unlink(direnew2,recursive=TRUE)
+# if (!dir.exists(direnew2))
+#   dir.create(direnew2)
+# 
+# direnew3 <- paste(dire, "/Samples", sep = "")
+# # if (dir.exists(direnew1))
+# #   unlink(direnew1,recursive=TRUE)
+# if (!dir.exists(direnew3))
+#   dir.create(direnew3)
 # 
 #------------------------------------------
 # Read survey 2022
 #------------------------------------------
 #s2022old <- fread(paste0(path_data,"survey_2022.txt"))
-s2022 <- read.csv(paste0(path_data,"LUCAS22_corrected_complete.csv"))
+s2022 <- fread(paste0(path_data,"Survey_2022_cal_wgt_standard.txt"))
 #remove rows with NA in LC, LU
 s2022=s2022[!(is.na(s2022$SURVEY_LC1) | is.na(s2022$SURVEY_LU1)), ]
 # Fill the missing digits
@@ -117,10 +117,10 @@ areas <- read.csv(paste0(path_data,"areas_2015_2024.csv"),colClasses = c(rep('ch
 # load(paste0(path_data,"Master_con_hrl_e_NUTS24.RData"))
 # master<-Master_con_hrl_e_NUTS24
 # rm(Master_con_hrl_e_NUTS24)
-load(paste0(path_data,"master_complete.RData"))
-table(master$NUTS0_24,useNA="ifany")
-c <- master[master$NUTS0_24=="",]
-table(c$NUTS0_16,useNA="ifany")
+# load(paste0(path_data,"master_complete.RData"))
+# table(master$NUTS0_24,useNA="ifany")
+# c <- master[master$NUTS0_24=="",]
+# table(c$NUTS0_16,useNA="ifany")
 ################################
 # geovisualize master points
 ################################
@@ -192,7 +192,7 @@ summary(s2022$settl_pc)
 ###########################################################################
 # exclusion of master points without points in the sample
 ###########################################################################
-master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
+# master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
 
 
 ###########################################################################
@@ -204,32 +204,32 @@ master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
 ###########################################################################
 # Eliminate Master points with NA in point_area
 ###########################################################################
-summary(master$point_area)
-a <- master[is.na(master$point_area),]
-master <- master[!is.na(master$point_area),]
+# summary(master$point_area)
+# a <- master[is.na(master$point_area),]
+# master <- master[!is.na(master$point_area),]
 
 
 ###########################################################################
 # master processing
 ###########################################################################
-master$ELEV2 <- ifelse(master$ELEV_DEM < 100, 1, 
-                       ifelse(master$ELEV_DEM < 200, 2,
-                              ifelse(master$ELEV < 500, 3,
-                                     ifelse(master$ELEV_DEM < 1000, 4,
-                                            ifelse(master$ELEV_DEM < 1500, 5, 6)))))
-master$ELEV2 <- as.factor(master$ELEV2)
-
-master$CLC18_1d<-factor(substr(master$CLC18_vett,1,1))
-master$NUTS0_24 <- factor(master$NUTS0_24)
-master$NUTS1_24 <- factor(master$NUTS1_24)
-master$NUTS2_24 <- factor(master$NUTS2_24)
-master$NUTS3_24 <- factor(master$NUTS3_24)
-master$BCK18_R <- factor(master$BCK18_R)
-master$BCK21_R <- factor(master$BCK21_R)
-master$CLC18_vett<-factor(master$CLC18_vett)
-master$imperviousness <- master$IMD18_10 /100
-master$art_imp <- master$imperviousness * master$point_area
-master$ones<-1
+# master$ELEV2 <- ifelse(master$ELEV_DEM < 100, 1, 
+#                        ifelse(master$ELEV_DEM < 200, 2,
+#                               ifelse(master$ELEV < 500, 3,
+#                                      ifelse(master$ELEV_DEM < 1000, 4,
+#                                             ifelse(master$ELEV_DEM < 1500, 5, 6)))))
+# master$ELEV2 <- as.factor(master$ELEV2)
+# 
+# master$CLC18_1d<-factor(substr(master$CLC18_vett,1,1))
+# master$NUTS0_24 <- factor(master$NUTS0_24)
+# master$NUTS1_24 <- factor(master$NUTS1_24)
+# master$NUTS2_24 <- factor(master$NUTS2_24)
+# master$NUTS3_24 <- factor(master$NUTS3_24)
+# master$BCK18_R <- factor(master$BCK18_R)
+# master$BCK21_R <- factor(master$BCK21_R)
+# master$CLC18_vett<-factor(master$CLC18_vett)
+# master$imperviousness <- master$IMD18_10 /100
+# master$art_imp <- master$imperviousness * master$point_area
+# master$ones<-1
 
 
 ##########
@@ -237,228 +237,229 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="CY")
+i = which(paesi=="AT")
 i
-sintesi=s2022 %>% group_by(NUTS0_24) %>% summarise(nlevel_nuts1=length(unique(NUTS1_24)), nlevel_nuts2=length(unique(NUTS2_24)))
+# sintesi=s2022 %>% group_by(NUTS0_24) %>% summarise(nlevel_nuts1=length(unique(NUTS1_24)), nlevel_nuts2=length(unique(NUTS2_24)))
 
 for (i in c(1:length(paesi))) {
   country <- paesi[i]
   cat("\n Country: ",country,"\n")
   # seleziono dal master le variabili che possono essere utili
-  m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24",
-                                           "ELEV2","N2K_SITETYPE",
-                                           "IMP18_10_cl", "IBU18_10","GRA18_10","FTY18_10",
-                                           "CLC18_1d","BCK18_R","BCK21_R")]
+  # m <- master[master$NUTS0_24 == country,c("POINT_ID","point_area","ones","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24",
+  #                                          "ELEV2","N2K_SITETYPE",
+  #                                          "IMP18_10_cl", "IBU18_10","GRA18_10","FTY18_10",
+  #                                          "CLC18_1d","BCK18_R","BCK21_R")]
   ##########################################
-  m <- m[!is.na(m$NUTS2_24),]
+  # m <- m[!is.na(m$NUTS2_24),]
   # m$geometry<-NULL
   # eliminate empty levels in factor variables in m 
-  m<-droplevels(m)
+  # m<-droplevels(m)
   # select country sample with variables of interest
-  s <- merge(s2022[,c("POINT_ID","fpc","Pop2023","SURVEY_OBS_TYPE",
+  s <- s2022[s2022$NUTS0_24==country,c("POINT_ID","fpc","Pop2023","SURVEY_OBS_TYPE",
+                                       "NUTS0_24","NUTS1_24","NUTS2_24",
                       "SURVEY_LC1","SURVEY_LU1","SURVEY_LC1_1","SURVEY_LU1_1",
                       "SURVEY_LC1_2","SURVEY_LU1_2","SURVEY_LC1_3","SURVEY_LU1_3",
                       "WGT_LUCAS", "STRATUM_LUCAS","settlement","fao_class_name",
-                      "lud","lue","settl_pc","area")], 
-             m,
-             by=c("POINT_ID"))  
+                      "lud","lue","settl_pc","area","cal_wgt")]
   s <- s[!is.na(s$WGT_LUCAS),]
   s<-droplevels(s)
   # align levels of factor variables in s and m
-  levels(s$ELEV2)    <- levels(m$ELEV2)
-  levels(s$NUTS2_24) <- levels(m$NUTS2_24)
-  levels(s$BCK21_R)  <- levels(m$BCK21_R)
-  levels(s$BCK18_R)  <- levels(m$BCK18_R)
-  levels(s$GRA18_10) <- levels(m$GRA18_10)
-  levels(s$FTY18_10) <- levels(m$FTY18_10R)
-  levels(s$CLC18_1d) <- levels(m$CLC18_1d)
+  # levels(s$ELEV2)    <- levels(m$ELEV2)
+  # levels(s$NUTS2_24) <- levels(m$NUTS2_24)
+  # levels(s$BCK21_R)  <- levels(m$BCK21_R)
+  # levels(s$BCK18_R)  <- levels(m$BCK18_R)
+  # levels(s$GRA18_10) <- levels(m$GRA18_10)
+  # levels(s$FTY18_10) <- levels(m$FTY18_10R)
+  # levels(s$CLC18_1d) <- levels(m$CLC18_1d)
+  cal <- e.svydesign(data=s, 
+                     ids= ~ POINT_ID, 
+                     strata= ~ STRATUM_LUCAS, 
+                     weights = ~ cal_wgt, 
+                     self.rep.str= NULL, 
+                     fpc= ~fpc, 
+                     check.data= TRUE)
+  ls <- find.lon.strata(cal)
+  #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
+  #if (!is.null(ls)) des <- collapse.strata(des)
+  if (!is.null(ls)) {
+    cal <-tryCatch({
+      cal <- collapse.strata(cal, block.vars = ~NUTS2_24)
+    },
+    error = function(e) {
+      cat("Error:", e$message, "\n")
+      cal <- collapse.strata(cal)
+      return(caql)
+    })
+  }
   ###############   
   # CALIBRATION
   ###############
-  s <- s[order(s$STRATUM_LUCAS),]
-  print(paste("nlevels NUTS2=",length(levels(s$NUTS2_24))))
-  print(paste("nlevels NUTS1=",length(levels(s$NUTS1_24))))
-  if (length(levels(s$NUTS2_24)) > 1) {
-    # design
-    des <- e.svydesign(data=s, 
-                       ids= ~ POINT_ID, 
-                       strata= ~ STRATUM_LUCAS, 
-                       weights = ~ WGT_LUCAS, 
-                       self.rep.str= NULL, 
-                       fpc= ~fpc, 
-                       check.data= TRUE)
-    ls <- find.lon.strata(des)
-    #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
-    #if (!is.null(ls)) des <- collapse.strata(des)
-    if (!is.null(ls)) {
-      des <-tryCatch({
-        des <- collapse.strata(des, block.vars = ~NUTS2_24)
-      },
-      error = function(e) {
-        cat("Error:", e$message, "\n")
-        des <- collapse.strata(des)
-        return(des)
-      })
-    }
-    
-    levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
-    levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
-    levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
-    
-    
-    # known totals
-    poptemp <- pop.template(data=des,
-                            calmodel=   ~
-                              point_area:NUTS2_24 +
-                              point_area:(
-                                ELEV2 +
-                                  BCK21_R +
-                                  GRA18_10 +
-                                  FTY18_10) - 1,
-    )
-    
-    # fill template with the master
-    popfill <- fill.template(universe=m, template= poptemp)
-    ######################################################
-    # and adjust with areas:
-    #area_totals <- areas$area2024[substr(areas$NUTS2,1,2)==country]
-    #area_totals <- area_totals[!is.na(area_totals)]
-    #popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"] <- area_totals
-    #sum(popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"])
-    ######################################################
-    # calibration
-    cal <- e.calibrate(design=des,
-                       df.population= popfill,
-                       calmodel=   ~
-                         point_area:NUTS2_24 +
-                         point_area:(
-                           ELEV2 +
-                             BCK21_R +
-                             GRA18_10 +
-                             FTY18_10) - 1,
-                       calfun= "linear",
-                       bounds =   c(0.01,50)
-    )
-    
-  }
-  
-  if (length(levels(s$NUTS2_24)) == 1) { 
-    # design
-    des <- e.svydesign(data=s, 
-                       ids= ~ POINT_ID, 
-                       strata= ~ STRATUM_LUCAS, 
-                       weights = ~ WGT_LUCAS, 
-                       self.rep.str= NULL, 
-                       fpc= ~fpc, 
-                       check.data= TRUE)
-    ls <- find.lon.strata(des)
-    #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
-    #if (!is.null(ls)) des <- collapse.strata(des)
-    if (!is.null(ls)) {
-      des <- tryCatch({
-        des <- collapse.strata(des, block.vars = ~NUTS2_24)
-      },
-      error = function(e) {
-        cat("Error:", e$message, "\n")
-        des <- collapse.strata(des)
-        return(des)
-      })
-    }
-    levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
-    levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
-    levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
-    # known totals for all countries except EE, LU, LV
-    if (!i %in% c(4,8,18,19)) {
-      poptemp <- pop.template(data=des,
-                              calmodel=   ~ 
-                                point_area +
-                                point_area:(
-                                  ELEV2+
-                                    BCK21_R+
-                                    GRA18_10+
-                                    FTY18_10) - 1)
-      # fill with master
-      
-      
-      popfill <- fill.template(universe=m, template= poptemp)
-      #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
-      
-      
-      # calibration
-      cal <- e.calibrate(design=des, 
-                         df.population= popfill, 
-                         calmodel=   ~ 
-                           point_area +
-                           point_area:(
-                             ELEV2+
-                               BCK21_R+
-                               GRA18_10+
-                               FTY18_10) - 1,
-                         calfun= "linear",
-                         bounds =   c(0.01,50)
-      )
-    }
-    # known totals for EE, LU, LV
-    if (i %in% c(8,18,19)) {
-      poptemp <- pop.template(data=des,
-                              calmodel=   ~ 
-                                point_area - 1)
-      # fill with the master
-      popfill <- fill.template(universe=m, template= poptemp)
-      popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
-      # calibration
-      cal <- e.calibrate(design=des, 
-                         df.population= popfill, 
-                         calmodel=   ~ 
-                           point_area - 1,
-                         calfun= "linear",
-                         bounds =   c(0.01,50)
-      )
-    }
-    # known totals for CY
-    if (i == 4) {
-      poptemp <- pop.template(data=des,
-                              calmodel=   ~ 
-                                point_area +
-                                point_area:(
-                                  GRA18_10+
-                                    FTY18_10) - 1,)
-      # fill with the master
-      popfill <- fill.template(universe=m, template= poptemp)
-      #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
-      # calibration
-      cal <- e.calibrate(design=des, 
-                         df.population= popfill, 
-                         calmodel=   ~ 
-                           point_area +
-                           point_area:(
-                             GRA18_10+
-                               FTY18_10) - 1,
-                         calfun= "linear",
-                         bounds =   c(0.01,50)
-      )
-    }
-  }
-  check.cal(cal)
+  # s <- s[order(s$STRATUM_LUCAS),]
+  # print(paste("nlevels NUTS2=",length(levels(s$NUTS2_24))))
+  # print(paste("nlevels NUTS1=",length(levels(s$NUTS1_24))))
+  # if (length(levels(s$NUTS2_24)) > 1) {
+  #   # design
+  # 
+  #   
+  #   levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
+  #   levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
+  #   levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
+  #   
+  #   
+  #   # known totals
+  #   poptemp <- pop.template(data=des,
+  #                           calmodel=   ~
+  #                             point_area:NUTS2_24 +
+  #                             point_area:(
+  #                               ELEV2 +
+  #                                 BCK21_R +
+  #                                 GRA18_10 +
+  #                                 FTY18_10) - 1,
+  #   )
+  #   
+  #   # fill template with the master
+  #   popfill <- fill.template(universe=m, template= poptemp)
+  #   ######################################################
+  #   # and adjust with areas:
+  #   #area_totals <- areas$area2024[substr(areas$NUTS2,1,2)==country]
+  #   #area_totals <- area_totals[!is.na(area_totals)]
+  #   #popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"] <- area_totals
+  #   #sum(popfill[substr(colnames(popfill),1,15)=="point_area:NUTS"])
+  #   ######################################################
+  #   # calibration
+  #   cal <- e.calibrate(design=des,
+  #                      df.population= popfill,
+  #                      calmodel=   ~
+  #                        point_area:NUTS2_24 +
+  #                        point_area:(
+  #                          ELEV2 +
+  #                            BCK21_R +
+  #                            GRA18_10 +
+  #                            FTY18_10) - 1,
+  #                      calfun= "linear",
+  #                      bounds =   c(0.01,50)
+  #   )
+  #   
+  # }
+  # 
+  # if (length(levels(s$NUTS2_24)) == 1) { 
+  #   # design
+  #   des <- e.svydesign(data=s, 
+  #                      ids= ~ POINT_ID, 
+  #                      strata= ~ STRATUM_LUCAS, 
+  #                      weights = ~ WGT_LUCAS, 
+  #                      self.rep.str= NULL, 
+  #                      fpc= ~fpc, 
+  #                      check.data= TRUE)
+  #   ls <- find.lon.strata(des)
+  #   #if (!is.null(ls)) des <- collapse.strata(des, block.vars=~NUTS2_24)
+  #   #if (!is.null(ls)) des <- collapse.strata(des)
+  #   if (!is.null(ls)) {
+  #     des <- tryCatch({
+  #       des <- collapse.strata(des, block.vars = ~NUTS2_24)
+  #     },
+  #     error = function(e) {
+  #       cat("Error:", e$message, "\n")
+  #       des <- collapse.strata(des)
+  #       return(des)
+  #     })
+  #   }
+  #   levels(des$variables$BCK21_R)<-levels(m$BCK21_R)
+  #   levels(des$variables$GRA18_10)<-levels(m$GRA18_10)
+  #   levels(des$variables$FTY18_10)<-levels(m$FTY18_10)
+  #   # known totals for all countries except EE, LU, LV
+  #   if (!i %in% c(4,8,18,19)) {
+  #     poptemp <- pop.template(data=des,
+  #                             calmodel=   ~ 
+  #                               point_area +
+  #                               point_area:(
+  #                                 ELEV2+
+  #                                   BCK21_R+
+  #                                   GRA18_10+
+  #                                   FTY18_10) - 1)
+  #     # fill with master
+  #     
+  #     
+  #     popfill <- fill.template(universe=m, template= poptemp)
+  #     #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+  #     
+  #     
+  #     # calibration
+  #     cal <- e.calibrate(design=des, 
+  #                        df.population= popfill, 
+  #                        calmodel=   ~ 
+  #                          point_area +
+  #                          point_area:(
+  #                            ELEV2+
+  #                              BCK21_R+
+  #                              GRA18_10+
+  #                              FTY18_10) - 1,
+  #                        calfun= "linear",
+  #                        bounds =   c(0.01,50)
+  #     )
+  #   }
+  #   # known totals for EE, LU, LV
+  #   if (i %in% c(8,18,19)) {
+  #     poptemp <- pop.template(data=des,
+  #                             calmodel=   ~ 
+  #                               point_area - 1)
+  #     # fill with the master
+  #     popfill <- fill.template(universe=m, template= poptemp)
+  #     popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+  #     # calibration
+  #     cal <- e.calibrate(design=des, 
+  #                        df.population= popfill, 
+  #                        calmodel=   ~ 
+  #                          point_area - 1,
+  #                        calfun= "linear",
+  #                        bounds =   c(0.01,50)
+  #     )
+  #   }
+  #   # known totals for CY
+  #   if (i == 4) {
+  #     poptemp <- pop.template(data=des,
+  #                             calmodel=   ~ 
+  #                               point_area +
+  #                               point_area:(
+  #                                 GRA18_10+
+  #                                   FTY18_10) - 1,)
+  #     # fill with the master
+  #     popfill <- fill.template(universe=m, template= poptemp)
+  #     #popfill[1] <- sum(areas$area2024[substr(areas$NUTS2,1,2)==country],na.rm=TRUE)
+  #     # calibration
+  #     cal <- e.calibrate(design=des, 
+  #                        df.population= popfill, 
+  #                        calmodel=   ~ 
+  #                          point_area +
+  #                          point_area:(
+  #                            GRA18_10+
+  #                              FTY18_10) - 1,
+  #                        calfun= "linear",
+  #                        bounds =   c(0.01,50)
+  #     )
+  #   }
+  # }
+  # check.cal(cal)
   #UWE(cal)
   summary(s$WGT_LUCAS)
   sum(s$WGT_LUCAS)
-  sum(m$ones)
-  sum(m$point_area)
-  cal$prob <- cal$prob/cal$variables$point_area
-  sum(weights(cal))
-  summary(weights(cal))
-  s$cal_wgt <- weights(cal)
+  # sum(m$ones)
+  # sum(m$point_area)
+  # cal$prob <- cal$prob/cal$variables$point_area
+  # sum(weights(cal))
+  # summary(weights(cal))
+  # s$cal_wgt <- weights(cal)
+  sum(s$cal_wgt)
   
   ##########################   
   # write calibrated weights
   ##########################
-  df <- NULL
-  df$POINT_ID <- cal$variables$POINT_ID
-  df$cal_wgt <- weights(cal)
-  df <- as.data.frame(df)
-  filename <- paste(country,"_calibrated_wgts_2022.txt",sep="")
-  write.table(df,file = file.path(direnew2, filename),sep="\t",quote=FALSE,row.names=FALSE,dec=".")
+  # df <- NULL
+  # df$POINT_ID <- cal$variables$POINT_ID
+  # df$cal_wgt <- weights(cal)
+  # df <- as.data.frame(df)
+  # filename <- paste(country,"_calibrated_wgts_2022.txt",sep="")
+  # write.table(df,file = file.path(direnew2, filename),sep="\t",quote=FALSE,row.names=FALSE,dec=".")
   # filename<- paste(country,"_des.Rdata",sep="")
   # save(des,file=file.path(direnew3, filename))
   # filename<- paste(country,"_cal.Rdata",sep="")
@@ -530,7 +531,7 @@ for (i in c(1:length(paesi))) {
   #---------------------------------------------------------------
   # 2nd PHASE
   #---------------------------------------------------------------
-  source("Script/1.estimates_by_country_twoPhases_secondPhase_simplified_noField.R")
+  source("Script/1.estimates_by_country_twoPhases_secondPhase_simplified_NoField.R")
   
   #---------------------------------------------------------------
   # Join outputs and write them

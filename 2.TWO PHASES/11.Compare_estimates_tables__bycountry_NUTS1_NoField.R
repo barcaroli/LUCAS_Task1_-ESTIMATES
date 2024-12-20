@@ -10,11 +10,14 @@ library(dplyr)
 library(tidyr)
 
 # read countries:
-load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+# load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+load("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES//Script/countries.RData")
+
 
 #create folder where results must be saved: 
 #setwd:
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
 dire <- getwd()
 direnew1 <- paste(dire, "\\Estimates_comparison_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
@@ -35,7 +38,8 @@ for(i in 1:length(countries)){
   #-------------------
   # Standard estimates
   #-------------------
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/estimates2022")
+  # setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/estimates2022")
+  setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/estimates2022")
   
   # leggo i dati delle stime europee nelle due procedure:
   c1 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS1_24_2022_t.csv"))
@@ -65,7 +69,9 @@ c1= c1 %>% pivot_wider(names_from = "tipo", values_from = "value")
   #-------------------
   # twophasehase estimates
   #-------------------
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022_NoField")
+  # setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/estimates2022_NoField")
+  setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022_NoField")
+  
   # leggo i dati delle stime europee nelle due procedure:
   c2 <- read.csv(paste0(countries[i],"_est_LC1_LU1_NUTS1_24_2022_t.csv"))
   c2 = c2 %>% filter(variable !="variable")

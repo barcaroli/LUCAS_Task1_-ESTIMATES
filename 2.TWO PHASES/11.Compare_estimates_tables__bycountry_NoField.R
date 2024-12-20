@@ -8,11 +8,13 @@ library(formattable)
 library(openxlsx)
 
 # read countries:
-load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+# load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+load("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES//Script/countries.RData")
 
 #create folder where results must be saved: 
 #setwd:
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
 dire <- getwd()
 direnew1 <- paste(dire, "\\Estimates_comparison_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
@@ -31,7 +33,8 @@ for(i in 1:length(countries)){
   #-------------------
   # Standard estimates
   #-------------------
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/allyears_estimates")
+  # setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/allyears_estimates")
+  setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/allyears_estimates")
   
 # leggo i dati delle stime europee nelle due procedure:
 c1 <- read.csv(paste0(countries[i],"_est_all.csv"))
@@ -54,8 +57,8 @@ c1$CV_2022 <- round(c1$CV_2022,3)
 #-------------------
 # twophasehase estimates
 #-------------------
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates_NoField")
-# setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates_NoField")
+setwd("D:\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/allyears_estimates_NoField")
 
 c2 <- read.csv(paste0(countries[i],"_est_all.csv"))
 #seleziono solo le stime delle aree 2022

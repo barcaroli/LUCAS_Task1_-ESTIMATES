@@ -12,12 +12,13 @@ bodyStyle <- createStyle(textDecoration = "bold", fontSize=12,fontColour = "#FFF
 #-------------------
 # Standard estimates
 #-------------------
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/EU_estimates")
-#setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/EU_estimates")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates")
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/EU_estimates")
 # eu <- read.xlsx("Europe_estimates.xlsx",sheetIndex = 1,colClasses = rep("numeric",5))
 
-dire="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES"
+# dire="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES"
+dire="D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES"
 
 direnew1 <- paste(dire, "\\Estimates_comparison_NoField\\", sep = "")
 # if (dir.exists(direnew1)) 
@@ -40,9 +41,10 @@ eu1$Area2022 <- round(eu1$Area2022)
 eu1$CV_2022 <- round(eu1$CV_2022,3)
 
 #-------------------
-# twophasehase estimates
+# twophase estimates
 #-------------------
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates_NoField")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates_NoField")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates_NoField")
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
 # eu <- read.xlsx("Europe_estimates.xlsx",sheetIndex = 1,colClasses = rep("numeric",5))
 eu2 <- read.xlsx("Europe_estimates.xlsx",sheet = 3)

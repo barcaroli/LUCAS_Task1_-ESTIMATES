@@ -3,11 +3,14 @@ library(formattable)
 library(openxlsx)
 #library(xlsx)
 #set wd
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
 # read countries:
-load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+# load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Script/countries.RData")
+load("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/Script/countries.RData")
 
-dire_comparison="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/"
+# dire_comparison="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/"
+dire_comparison="D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/Estimates_comparison/"
 
 wb=createWorkbook()
 # comparison European level-------

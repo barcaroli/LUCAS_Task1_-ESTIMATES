@@ -4,11 +4,11 @@
 options(stringsAsFactors = TRUE)
 library(openxlsx)
 library(data.table)
-#setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
 #setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES")
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
-#filename <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/tables_country/tables_all.xlsx"
-filename <- "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/tables_country_NoField/tables_all.xlsx"
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
+filename <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/tables_country/tables_all.xlsx"
+# filename <- "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/tables_country_NoField/tables_all.xlsx"
 
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
 # filename <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/tables_country/tables_all.xlsx"
@@ -29,7 +29,8 @@ for (i in (1:length(countries))) {
   #setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/allyears_estimates")
   #setwd("//pc.istat.it/xendesktop/DaaS/ilaria.bombelli/Desktop/GruppiDiLAvoro/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates")
   # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/allyears_estimates")
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates_NoField")
+  # setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates_NoField")
+  setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/allyears_estimates_NoField")
   cat("\n Country: ",countries[i],"\n")
   eval(parse(text=paste("df <- fread('",countries[i],"_est_all.csv',dec='.')",sep="")))
   addWorksheet(wb, sheetName = countries[i])

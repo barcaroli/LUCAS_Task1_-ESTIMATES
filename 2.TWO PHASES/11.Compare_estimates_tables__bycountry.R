@@ -8,11 +8,13 @@ library(formattable)
 library(openxlsx)
 
 # read countries:
-load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+# load("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES//Script/countries.RData")
+load("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES//Script/countries.RData")
 
 #create folder where results must be saved: 
 #setwd:
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
 dire <- getwd()
 direnew1 <- paste(dire, "\\Estimates_comparison\\", sep = "")
 # if (dir.exists(direnew1)) 
@@ -31,7 +33,8 @@ for(i in 1:length(countries)){
   #-------------------
   # Standard estimates
   #-------------------
-  setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/allyears_estimates")
+  # setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/1.STANDARD/allyears_estimates")
+  setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/allyears_estimates")
   
 # leggo i dati delle stime europee nelle due procedure:
 c1 <- read.csv(paste0(countries[i],"_est_all.csv"))
@@ -54,7 +57,9 @@ c1$CV_2022 <- round(c1$CV_2022,3)
 #-------------------
 # twophasehase estimates
 #-------------------
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/allyears_estimates")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/allyears_estimates")
+
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates")
 
 c2 <- read.csv(paste0(countries[i],"_est_all.csv"))
@@ -233,7 +238,8 @@ addStyle(wb, sheet = "LU 3 digits", bodyStyle, rows = 2:(nrow(t)+1), cols = 1, g
 writeData(wb, sheet = "LU 3 digits", x = t, colNames = TRUE, rowNames = FALSE)
 # Write all
 #setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES")
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/")
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/Estimates_comparison/")
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/Estimates_comparison/")
 saveWorkbook(wb, paste0(countries[i],"_Estimates_comparison.xlsx"), overwrite = TRUE)
 
 }

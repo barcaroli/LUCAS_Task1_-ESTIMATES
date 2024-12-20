@@ -2,19 +2,23 @@
 # Script to compare estimate trends at EU level (22, 26, 26) 
 #-----------------------------------------------------------
 options(stringsAsFactors = TRUE)
+options(scipen=100)
+# detach("package:xlsx", unload = TRUE)
 library(openxlsx)
 library(data.table)
-# path_output <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
-# setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022")
-# EU_structure <- read.csv("D:/Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
+path_output <- "D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
+setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/")
+EU_structure <- read.csv("D:/Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
 # path_output <- "C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/EU_estimates/"
 # setwd("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/Task 1 - ESTIMATES/2.TWO PHASES/estimates2022")
 # EU_structure <- read.csv("C:\\Users\\UTENTE\\Google Drive/LUCAS 2025/2.DATA/Eu_structure.csv")
 
-setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
-path_output = "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates/"
-EU_structure <- read.csv("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/Eu_structure.csv")
-path_previous_estimates="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/previous_estimates/"
+# setwd("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES")
+# path_output = "C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/2.TWO PHASES/EU_estimates/"
+# EU_structure <- read.csv("C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/Eu_structure.csv")
+# path_previous_estimates="C:/Users/UTENTE/Desktop/Progetto_LUCAS/Task1/DATA/previous_estimates/"
+path_previous_estimates="D:\\Google Drive\\LUCAS 2025\\previous estimates/"
+
 EU_structure <- EU_structure[-nrow(EU_structure),]
 
 dire <- getwd()

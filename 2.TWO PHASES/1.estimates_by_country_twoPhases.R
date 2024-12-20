@@ -289,7 +289,7 @@ for (i in c(1:length(paesi))) {
     error = function(e) {
       cat("Error:", e$message, "\n")
       cal <- collapse.strata(cal)
-      return(caql)
+      return(cal)
     })
   }
   ###############   

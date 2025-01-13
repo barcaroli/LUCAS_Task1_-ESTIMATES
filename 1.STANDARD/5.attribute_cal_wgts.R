@@ -9,11 +9,11 @@ path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 # m <- master[,c(1:7,11:15)]
 #---------------------------------------------------------------------------
 # 2022
-s <- fread(paste0(path_data,"survey_2022.txt"))
+s <- fread(paste0(path_data,"LUCAS22_corrected_complete.csv"))
 # s <- merge(s,m)
 # colnames(s)[3] <- "initial_weights"
 # s$stratum <- as.factor(paste(s$NUTS2_16,s$STRATUM_LABEL,sep="_"))
-countries <- levels(as.factor(s$NUTS0_16))
+countries <- levels(as.factor(s$NUTS0_24))
 setwd("D:/Google Drive/LUCAS 2025/Task 1 - ESTIMATES/1.STANDARD/weights2022")
 s_wgt <- NULL
 for (i in (1:length(countries))) {

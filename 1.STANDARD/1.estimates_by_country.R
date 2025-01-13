@@ -16,21 +16,21 @@ path_data <- "D:/Google Drive/LUCAS 2025/2.DATA/"
 # Prepare the path for the output
 dire <- getwd()
 direnew1 <- paste(dire, "/estimates2022", sep = "")
-# if (dir.exists(direnew1))
-#   unlink(direnew1,recursive=TRUE)
+if (dir.exists(direnew1))
+  unlink(direnew1,recursive=TRUE)
 if (!dir.exists(direnew1))
   dir.create(direnew1)
 # 
 direnew2 <- paste(dire, "/weights2022", sep = "")
-# if (dir.exists(direnew2))
-#   unlink(direnew2,recursive=TRUE)
+if (dir.exists(direnew2))
+  unlink(direnew2,recursive=TRUE)
 if (!dir.exists(direnew2))
   dir.create(direnew2)
 
 #------------------------------------------
 # Read survey 2022
 #------------------------------------------
-s2022 <- fread(paste0(path_data,"survey_2022.txt"))
+s2022 <- fread(paste0(path_data,"LUCAS22_corrected_complete.csv"))
 # Fill the missing digits
 s2022$SURVEY_LC1 <- as.character(s2022$SURVEY_LC1)
 table(s2022$SURVEY_LC1)
@@ -67,15 +67,17 @@ s2022$settlement <- as.factor(s2022$settlement)
 s2022$lue <- as.factor(s2022$lue)
 s2022$lud <- as.factor(s2022$lud)
 ###########################################################
-# Eliminate incomplete LC and LU
-# a <- s2022[nchar(as.character(s2022$SURVEY_LC1_2)) < 2,]
-# # 688
-# b <- s2022[nchar(as.character(s2022$SURVEY_LC1_3)) < 3,]
-# # 6190
-# c <- s2022[nchar(as.character(s2022$SURVEY_LU1_2)) < 3,]
-# d <- s2022[nchar(as.character(s2022$SURVEY_LU1_3)) < 4,]
-# s2022 <- s2022[!(nchar(as.character(s2022$SURVEY_LC1_2)) < 2) &
-#                  !(nchar(as.character(s2022$SURVEY_LC1_3)) < 3),]
+# Eliminate incomplete or missing LC and LU
+a <- s2022[nchar(as.character(s2022$SURVEY_LC1_2)) < 2,]
+# 688
+b <- s2022[nchar(as.character(s2022$SURVEY_LC1_3)) < 3,]
+# 6190
+c <- s2022[nchar(as.character(s2022$SURVEY_LU1_2)) < 3,]
+d <- s2022[nchar(as.character(s2022$SURVEY_LU1_3)) < 4,]
+s2022 <- s2022[!(nchar(as.character(s2022$SURVEY_LC1_2)) < 2) &
+                 !(nchar(as.character(s2022$SURVEY_LC1_3)) < 3),]
+table(s2022$SURVEY_LC1,useNA="ifany")
+table(s2022$SURVEY_LU1,useNA="ifany")
 ###########################################################
 # Calculate fpc
 ###########################################################
@@ -105,8 +107,8 @@ areas <- read.csv(paste0(path_data,"areas_2015_2024.csv"),colClasses = c(rep('ch
 load(paste0(path_data,"master_complete.RData"))
 
 table(master$NUTS0_24,useNA="ifany")
-c <- master[master$NUTS0_24=="",]
-table(c$NUTS0_16,useNA="ifany")
+# c <- master[master$NUTS0_24=="",]
+# table(c$NUTS0_24,useNA="ifany")
 ################################
 # geovisualize master points
 ################################
@@ -153,18 +155,18 @@ table(c$NUTS0_16,useNA="ifany")
 
 ###########################################################################
 # Assign the new NUTS24 to the sample
-s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
+# s2022 <- merge(s2022,master[,c("POINT_ID","NUTS0_24","NUTS1_24","NUTS2_24","NUTS3_24")],by="POINT_ID",all.x=TRUE)
 s2022$NUTS0_24 <- as.factor(s2022$NUTS0_24)
 s2022$NUTS1_24 <- as.factor(s2022$NUTS1_24)
 s2022$NUTS2_24 <- as.factor(s2022$NUTS2_24)
-a <- s2022[is.na(s2022$NUTS2_24),]
-b <- master[is.na(master$NUTS2_24),]
+# a <- s2022[is.na(s2022$NUTS2_24),]
+# b <- master[is.na(master$NUTS2_24),]
 
 ###########################################################################
 # Read population
-pop <- read.csv(paste0(path_data,"EU_population_2009_2023.csv"))
-colnames(pop) <- c("NUTS","Pop2009","Pop2012","Pop2015","Pop2018","Pop2023")
-s2022 <- merge(s2022,pop[,c("NUTS","Pop2023")],by.x="NUTS0_24",by.y="NUTS")
+# pop <- read.csv(paste0(path_data,"EU_population_2009_2023.csv"))
+# colnames(pop) <- c("NUTS","Pop2009","Pop2012","Pop2015","Pop2018","Pop2023")
+# s2022 <- merge(s2022,pop[,c("NUTS","Pop2023")],by.x="NUTS0_24",by.y="NUTS")
 
 
 ###########################################################
@@ -177,21 +179,21 @@ summary(s2022$settl_pc)
 ###########################################################################
 # exclusion of master points without points in the sample
 ###########################################################################
-master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
+# master<-master[master$NUTS0_24 %in% unique(s2022$NUTS0_24),]
 
 
 ###########################################################################
 # exclusion of some NUTS2  --> ask for confirm!
 ###########################################################################
-excl_nuts2 <- c("ES63","ES64","ES70","FR9","PT20","PT30") 
-master <- master[!(master$NUTS2_24 %in% excl_nuts2),]
+# excl_nuts2 <- c("ES63","ES64","ES70","FR9","PT20","PT30") 
+# master <- master[!(master$NUTS2_24 %in% excl_nuts2),]
 
 ###########################################################################
 # Eliminate Master points with NA in point_area
 ###########################################################################
-summary(master$point_area)
-a <- master[is.na(master$point_area),]
-master <- master[!is.na(master$point_area),]
+# summary(master$point_area)
+# a <- master[is.na(master$point_area),]
+# master <- master[!is.na(master$point_area),]
 
 
 ###########################################################################
@@ -222,7 +224,7 @@ master$ones<-1
 ##########
 
 paesi <- levels(as.factor(s2022$NUTS0_24))
-i = which(paesi=="AT")
+i = which(paesi=="BE")
 i
 
 for (i in c(1:length(paesi))) {
